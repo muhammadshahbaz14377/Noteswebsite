@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Shahbaz | Computer Science Notes</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>MS</text></svg>">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#050508;--bg-2:#0a0a12;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--text:#f0f0f5;--muted:#8a8a9a;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#06b6d4;--violet:#a855f7;--grad:linear-gradient(135deg,#8b5cf6,#3b82f6,#06b6d4);--glow:0 0 40px rgba(139,92,246,.35);--radius:18px;--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--transition:.3s cubic-bezier(.4,0,.2,1)}
@@ -221,7 +222,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 </head>
 <body>
 
-<div id="loader"><div class="spinner"></div><p style="color:var(--muted);font-size:.9rem">Loading portal…</p></div>
+<div id="loader"><div class="spinner"></div><p style="color:var(--muted);font-size:.9rem">Connecting to Supabase…</p></div>
 <div id="scroll-progress"></div>
 
 <div id="auth-bar">
@@ -305,7 +306,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
         <div class="counter-card"><div class="counter-num" data-target="500">0</div><div class="counter-label">Students Reached*</div></div>
       </div>
     </div>
-    <p style="font-size:.75rem;color:var(--muted);margin-top:1rem;text-align:center">*Approximate reach based on classroom and institutional engagements.</p>
   </div>
 </section>
 
@@ -376,7 +376,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
       <p>Only the admin can upload notes. Check back later.</p>
     </div>
 
-    <!-- ADMIN PANEL -->
     <div class="admin-panel" id="admin-panel">
       <div class="admin-tabs">
         <button class="admin-tab active" data-tab="notes">📝 Notes</button>
@@ -384,15 +383,13 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
         <button class="admin-tab" data-tab="content">📄 Content</button>
         <button class="admin-tab" data-tab="contact">📞 Contact</button>
         <button class="admin-tab" data-tab="institutions">🏫 Institutions</button>
-        <button class="admin-tab" data-tab="security">🔒 Security</button>
       </div>
 
-      <!-- TAB: NOTES -->
       <div class="admin-tab-content active" id="tab-notes">
-        <div class="admin-notice">⚠️ <strong>Local Storage Mode:</strong> Notes are saved in <em>this browser only</em>. To share, upload files to a hosting service and provide direct links.</div>
+        <div class="admin-notice">✅ <strong>Supabase Connected:</strong> Files are stored in <code>cs-notes</code> bucket, metadata in <code>noteswebsite</code> table. Notes appear on all devices.</div>
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.2rem">
           <h3 style="font-size:1.1rem">Upload New Note</h3>
-          <button class="btn btn-sm btn-outline" id="refresh-admin-notes">Refresh Notes</button>
+          <button class="btn btn-sm btn-outline" id="refresh-admin-notes">🔄 Refresh</button>
         </div>
         <form class="admin-form" id="upload-form">
           <div class="form-grid">
@@ -427,43 +424,40 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
           </div>
           <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-progress-bar"></div></div>
           <div style="display:flex;gap:.8rem;margin-top:1rem;flex-wrap:wrap">
-            <button type="submit" class="btn btn-primary">Upload Note</button>
+            <button type="submit" class="btn btn-primary">Upload to Supabase</button>
             <button type="button" class="btn btn-outline" id="upload-cancel">Reset</button>
           </div>
         </form>
       </div>
 
-      <!-- TAB: PROFILE -->
       <div class="admin-tab-content" id="tab-profile">
         <h3 style="margin-bottom:1.2rem">Profile & Hero</h3>
         <div class="profile-preview">
           <img id="profile-preview-img" src="" alt="Preview">
           <div>
-            <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem">Current profile picture</p>
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem">Profile photo (stored in Supabase Storage)</p>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
               <label class="btn btn-sm btn-primary" style="cursor:pointer">
                 📷 Change Photo
                 <input type="file" id="profile-file-input" accept="image/*" style="display:none">
               </label>
-              <button class="btn btn-sm btn-outline" id="profile-remove-btn">Remove Photo</button>
+              <button class="btn btn-sm btn-outline" id="profile-remove-btn">Remove</button>
             </div>
           </div>
         </div>
         <form id="profile-form">
           <div class="form-group"><label>Display Name</label><input type="text" id="profile-name-input" maxlength="60"></div>
-          <div class="form-group"><label>Typewriter Titles (comma-separated)</label><input type="text" id="profile-titles-input" placeholder="Website Designer,Teacher,AI Expert"></div>
+          <div class="form-group"><label>Typewriter Titles (comma-separated)</label><input type="text" id="profile-titles-input"></div>
           <button type="submit" class="btn btn-primary">Save Profile</button>
         </form>
       </div>
 
-      <!-- TAB: CONTENT -->
       <div class="admin-tab-content" id="tab-content">
         <h3 style="margin-bottom:1.2rem">Hero & About Content</h3>
         <form id="content-form">
           <div class="form-group">
             <label>Hero Title (HTML allowed)</label>
-            <textarea id="content-hero-title" rows="2" placeholder='Welcome to <span class="gradient-text">Muhammad Shahbaz\'s</span> Computer Science Notes Portal'></textarea>
-            <small>Tip: Use <code>&lt;span class="gradient-text"&gt;text&lt;/span&gt;</code> for gradient highlight.</small>
+            <textarea id="content-hero-title" rows="2"></textarea>
           </div>
           <div class="form-group"><label>Hero Subtitle</label><textarea id="content-hero-subtitle" rows="2"></textarea></div>
           <div class="form-group"><label>About Paragraph 1</label><textarea id="content-about-1" rows="3"></textarea></div>
@@ -472,24 +466,22 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
         </form>
       </div>
 
-      <!-- TAB: CONTACT -->
       <div class="admin-tab-content" id="tab-contact">
         <h3 style="margin-bottom:1.2rem">Contact Information</h3>
         <form id="contact-form-admin">
           <div class="form-grid">
             <div class="form-group"><label>Email</label><input type="email" id="contact-email-input"></div>
             <div class="form-group"><label>Phone (display)</label><input type="text" id="contact-phone-input"></div>
-            <div class="form-group"><label>WhatsApp Number (digits only, e.g., 923176092143)</label><input type="text" id="contact-wa-input"></div>
+            <div class="form-group"><label>WhatsApp (digits only)</label><input type="text" id="contact-wa-input"></div>
             <div class="form-group"><label>Location</label><input type="text" id="contact-location-input"></div>
           </div>
           <button type="submit" class="btn btn-primary">Save Contact Info</button>
         </form>
       </div>
 
-      <!-- TAB: INSTITUTIONS -->
       <div class="admin-tab-content" id="tab-institutions">
         <h3 style="margin-bottom:1.2rem">Institutions (JSON)</h3>
-        <div class="admin-notice">Each institution: <code>{"name":"...","role":"...","desc":"...","icon":"🎓"}</code></div>
+        <div class="admin-notice">Format: <code>{"name":"...","role":"...","desc":"...","icon":"🎓"}</code></div>
         <div class="form-group">
           <label>Institutions JSON</label>
           <textarea id="institutions-json" rows="14" style="font-family:monospace;font-size:.8rem"></textarea>
@@ -499,18 +491,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
           <button class="btn btn-outline" id="reset-institutions-btn">Reset to Defaults</button>
         </div>
       </div>
-
-      <!-- TAB: SECURITY -->
-      <div class="admin-tab-content" id="tab-security">
-        <h3 style="margin-bottom:1.2rem">Change Admin Password</h3>
-        <form id="password-form" style="max-width:400px">
-          <div class="form-group"><label>Current Password</label><input type="password" id="pwd-current" required></div>
-          <div class="form-group"><label>New Password (min 6 chars)</label><input type="password" id="pwd-new" required minlength="6"></div>
-          <div class="form-group"><label>Confirm New Password</label><input type="password" id="pwd-confirm" required minlength="6"></div>
-          <button type="submit" class="btn btn-primary">Update Password</button>
-        </form>
-        <div class="admin-notice" style="margin-top:1.5rem">Default password: <code>11223344</code> — change it now for security.</div>
-      </div>
     </div>
   </div>
 </section>
@@ -519,7 +499,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
   <div class="container">
     <div class="section-header reveal">
       <h2>Contact <span class="gradient-text">Muhammad Shahbaz</span></h2>
-      <p>Reach out directly via email or WhatsApp, or send a student message through the form.</p>
+      <p>Reach out directly via email or WhatsApp.</p>
     </div>
     <div class="contact-grid">
       <div class="contact-info-card reveal">
@@ -563,7 +543,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
     <div class="footer-grid">
       <div class="footer-brand">
         <div class="logo"><span class="logo-mark">MS</span><span id="footer-logo-text">Muhammad Shahbaz</span></div>
-        <p>Computer Science Educator | Website Designer | AI Expert. Dedicated to accessible, high-quality educational resources.</p>
+        <p>Computer Science Educator | Website Designer | AI Expert.</p>
       </div>
       <div class="footer-col">
         <h4>Quick Links</h4>
@@ -589,10 +569,9 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 </a>
 
 <button id="back-to-top" aria-label="Back to top">↑</button>
-<div id="storage-status"><span class="dot"></span><span id="storage-text">Checking…</span></div>
+<div id="storage-status"><span class="dot"></span><span id="storage-text">Connecting…</span></div>
 <div id="toast-container"></div>
 
-<!-- LOGIN MODAL -->
 <div class="modal-overlay" id="login-modal">
   <div class="modal">
     <h3>Admin Login</h3>
@@ -607,7 +586,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
   </div>
 </div>
 
-<!-- DELETE CONFIRM MODAL -->
 <div class="modal-overlay" id="delete-modal">
   <div class="modal">
     <h3>Confirm Delete</h3>
@@ -619,7 +597,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
   </div>
 </div>
 
-<!-- EDIT NOTE MODAL -->
 <div class="modal-overlay" id="edit-note-modal">
   <div class="modal">
     <h3>Edit Note</h3>
@@ -649,7 +626,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
         <div class="form-group full">
           <label>Replace File (optional)</label>
           <input type="file" id="edit-file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" style="padding:.6rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;width:100%">
-          <small>Leave empty to keep the existing file.</small>
         </div>
       </div>
       <div class="modal-actions">
@@ -662,21 +638,51 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 
 <script>
 /* ============================================================
-   1. CONFIG
+   1. CONFIG — YOUR SUPABASE CREDENTIALS
    ============================================================ */
+const SUPABASE_URL = 'https://hepsdgxqawvmmswpcvnj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_-j_HjYLwwHPH2Qwng4ELTQ_qA6a_jyS';
+const BUCKET = 'cs-notes';
+const TABLE = 'noteswebsite';
+const PROFILE_PATH = 'profile/avatar';
+const MAX_SIZE = 50 * 1024 * 1024;
+const ALLOWED_EXT = ['pdf','doc','docx','ppt','pptx','txt','jpg','jpeg','png'];
 const AUTH_KEY = 'ms-admin-auth';
 const PWD_HASH_KEY = 'ms-admin-password';
 const SETTINGS_KEY = 'ms-site-settings';
 const THEME_KEY = 'ms-theme';
-const DB_NAME = 'ms-notes-db';
-const DB_VERSION = 1;
-const STORE_FILES = 'files';
-const STORE_META = 'metadata';
-const MAX_SIZE = 50 * 1024 * 1024;
-const ALLOWED_EXT = ['pdf','doc','docx','ppt','pptx','txt','jpg','jpeg','png'];
-const ALLOWED_MIME = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','text/plain','image/jpeg','image/png'];
-const PROFILE_KEY = '__profile__';
 const DEFAULT_PWD_HASH = btoa('11223344');
+
+/* ============================================================
+   2. SUPABASE CLIENT — SAFE INIT (fixes TDZ bug)
+   ============================================================ */
+let supabase = null;
+try {
+  if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('✅ Supabase client initialized');
+  } else {
+    console.error('❌ Supabase SDK not loaded from CDN');
+  }
+} catch (err) {
+  console.error('❌ Supabase init error:', err);
+}
+
+/* ============================================================
+   3. STATE
+   ============================================================ */
+let allNotes = [];
+let currentClass = '';
+let currentSearch = '';
+let currentSubject = '';
+let currentChapter = '';
+let isAdmin = false;
+let deleteTargetNote = null;
+let selectedFile = null;
+let currentEditNote = null;
+let profileUrl = null;
+let typewriterTimer = null;
+let twIdx = 0, twChar = 0, twDeleting = false;
 
 const DEFAULT_INSTITUTIONS = [
   { name: 'Legend College Muzaffargarh', role: 'Head of Department — BS IT', desc: "I am serving as the Head of Department of BS Information Technology at Legend College Muzaffargarh, where I contribute to academic leadership, educational planning, and the development of students' technical skills.", icon: '🎓' },
@@ -702,23 +708,7 @@ const DEFAULT_SETTINGS = {
 };
 
 /* ============================================================
-   2. STATE
-   ============================================================ */
-let allNotes = [];
-let currentClass = '';
-let currentSearch = '';
-let currentSubject = '';
-let currentChapter = '';
-let isAdmin = false;
-let deleteTargetId = null;
-let selectedFile = null;
-let currentEditId = null;
-let profileUrl = null;
-let typewriterTimer = null;
-let twIdx = 0, twChar = 0, twDeleting = false;
-
-/* ============================================================
-   3. HELPERS
+   4. HELPERS
    ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -728,7 +718,7 @@ function toast(msg, type = 'info') {
   el.className = `toast ${type}`;
   el.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span><span>${msg}</span>`;
   $('#toast-container').appendChild(el);
-  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; setTimeout(() => el.remove(), 400); }, 4200);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; setTimeout(() => el.remove(), 400); }, 4500);
 }
 
 function escapeHtml(str) {
@@ -736,112 +726,110 @@ function escapeHtml(str) {
   return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
-function formatBytes(bytes) {
-  if (!bytes || bytes === 0) return '—';
-  const k = 1024, sizes = ['B','KB','MB','GB'];
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+function formatBytes(b) {
+  if (!b || b === 0) return '—';
+  const k = 1024, s = ['B','KB','MB','GB'], i = Math.floor(Math.log(b)/Math.log(k));
+  return parseFloat((b/Math.pow(k,i)).toFixed(1)) + ' ' + s[i];
 }
 
 function formatDate(iso) {
   if (!iso) return '—';
-  try { return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
-  catch { return '—'; }
+  try { return new Date(iso).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}); } catch { return '—'; }
+}
+
+function genId() {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+  return 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2,10);
 }
 
 /* ============================================================
-   4. SETTINGS
+   5. SETTINGS (localStorage)
    ============================================================ */
 function getSettings() {
   try {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (!raw) return JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-    const parsed = JSON.parse(raw);
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
   } catch { return JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); }
 }
-
-function saveSettings(settings) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-}
+function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
 
 /* ============================================================
-   5. INDEXEDDB
+   6. SUPABASE OPERATIONS
    ============================================================ */
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, DB_VERSION);
-    req.onupgradeneeded = e => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_FILES)) db.createObjectStore(STORE_FILES);
-      if (!db.objectStoreNames.contains(STORE_META)) {
-        const s = db.createObjectStore(STORE_META, { keyPath: 'id' });
-        s.createIndex('uploaded_at', 'uploaded_at');
+async function sbPing() {
+  if (!supabase) return { ok: false, msg: 'Supabase SDK not loaded' };
+  try {
+    const { error } = await supabase.from(TABLE).select('notes', { count: 'exact', head: true });
+    if (error) {
+      if (error.code === 'PGRST205' || error.message?.includes('does not exist')) {
+        return { ok: false, msg: 'Table not found. Run SQL setup.' };
       }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
+      if (error.code === 'PGRST301' || error.message?.includes('permission')) {
+        return { ok: false, msg: 'RLS blocks access. Run SQL policies.' };
+      }
+      return { ok: false, msg: error.message };
+    }
+    return { ok: true, msg: 'Connected to Supabase' };
+  } catch (e) { return { ok: false, msg: e.message || 'Network error' }; }
+}
+
+async function sbFetchAllNotes() {
+  if (!supabase) throw new Error('Supabase not initialized');
+  const { data, error } = await supabase.from(TABLE).select('*');
+  if (error) throw error;
+  return (data || []).map(row => {
+    try {
+      const meta = JSON.parse(row.notes);
+      return { ...meta, _raw: row.notes };
+    } catch {
+      return { id: 'raw-' + genId(), title: row.notes, _raw: row.notes, uploaded_at: null };
+    }
   });
 }
 
-function withStore(store, mode, fn) {
-  return openDB().then(db => new Promise((resolve, reject) => {
-    const tx = db.transaction(store, mode);
-    const s = tx.objectStore(store);
-    let result;
-    try { result = fn(s); }
-    catch (err) { reject(err); return; }
-    tx.oncomplete = () => resolve(result && result._req ? result._req.result : result);
-    tx.onerror = () => reject(tx.error);
-    tx.onabort = () => reject(tx.error || new Error('Transaction aborted'));
-  }));
+async function sbUploadFile(file, path) {
+  if (!supabase) throw new Error('Supabase not initialized');
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: true });
+  if (error) throw error;
 }
 
-const saveFileBlob = (id, blob) => withStore(STORE_FILES, 'readwrite', s => { s.put(blob, id); });
-const getFileBlob = id => withStore(STORE_FILES, 'readonly', s => { const r = s.get(id); return { _req: r }; });
-const deleteFileBlob = id => withStore(STORE_FILES, 'readwrite', s => { s.delete(id); });
+async function sbDeleteFile(path) {
+  if (!supabase || !path) return;
+  try { await supabase.storage.from(BUCKET).remove([path]); } catch (e) { console.warn('File delete failed:', e); }
+}
 
-const getAllMeta = () => withStore(STORE_META, 'readonly', s => { const r = s.getAll(); return { _req: r }; });
-const saveMeta = meta => withStore(STORE_META, 'readwrite', s => { s.put(meta); });
-const deleteMeta = id => withStore(STORE_META, 'readwrite', s => { s.delete(id); });
-const getMeta = id => withStore(STORE_META, 'readonly', s => { const r = s.get(id); return { _req: r }; });
+async function sbInsertNote(metadata) {
+  if (!supabase) throw new Error('Supabase not initialized');
+  const { error } = await supabase.from(TABLE).insert({ notes: JSON.stringify(metadata) });
+  if (error) throw error;
+}
 
-async function checkStorageStatus() {
-  try {
-    await openDB();
-    $('#storage-status').className = 'ready';
-    $('#storage-text').textContent = 'Storage ready';
-  } catch {
-    $('#storage-status').className = 'error';
-    $('#storage-text').textContent = 'Storage unavailable';
-  }
+async function sbDeleteNoteRow(rawJson) {
+  if (!supabase) throw new Error('Supabase not initialized');
+  const { error } = await supabase.from(TABLE).delete().eq('notes', rawJson);
+  if (error) throw error;
+}
+
+function sbPublicUrl(path) {
+  if (!supabase) return '';
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return data?.publicUrl || '';
 }
 
 /* ============================================================
-   6. AUTH
+   7. AUTH (password gate)
    ============================================================ */
 function getPasswordHash() { return localStorage.getItem(PWD_HASH_KEY) || DEFAULT_PWD_HASH; }
 function isAdminLoggedIn() { return localStorage.getItem(AUTH_KEY) === '1'; }
-
-function login(password) {
-  if (btoa(password) === getPasswordHash()) {
-    localStorage.setItem(AUTH_KEY, '1');
-    return true;
-  }
+function login(pwd) {
+  if (btoa(pwd) === getPasswordHash()) { localStorage.setItem(AUTH_KEY, '1'); return true; }
   return false;
 }
-
 function logout() { localStorage.removeItem(AUTH_KEY); }
 
-function changePassword(current, next) {
-  if (btoa(current) !== getPasswordHash()) return 'Current password is incorrect.';
-  if (next.length < 6) return 'New password must be at least 6 characters.';
-  localStorage.setItem(PWD_HASH_KEY, btoa(next));
-  return null;
-}
-
 /* ============================================================
-   7. THEME
+   8. THEME
    ============================================================ */
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -850,100 +838,84 @@ function initTheme() {
 }
 
 /* ============================================================
-   8. APPLY SETTINGS TO PAGE
+   9. APPLY SETTINGS
    ============================================================ */
 function applySettings() {
   const s = getSettings();
-
-  // Hero
   $('#hero-name').textContent = s.profileName;
   $('#hero-title').innerHTML = s.heroTitleHtml;
   $('#hero-subtitle').textContent = s.heroSubtitle;
   $('#logo-text').textContent = s.profileName;
   $('#footer-logo-text').textContent = s.profileName;
-
-  // About
   $('#about-text-1').textContent = s.aboutText1;
   $('#about-text-2').textContent = s.aboutText2;
-
-  // Contact card
-  const email = $('#contact-email');
-  email.textContent = s.email;
-  email.href = 'mailto:' + s.email;
-  const phone = $('#contact-phone');
-  phone.textContent = s.phone;
-  phone.href = 'https://wa.me/' + s.whatsapp;
+  const email = $('#contact-email'); email.textContent = s.email; email.href = 'mailto:' + s.email;
+  const phone = $('#contact-phone'); phone.textContent = s.phone; phone.href = 'https://wa.me/' + s.whatsapp;
   $('#contact-location').textContent = s.location;
-
-  // Footer
-  const fEmail = $('#footer-email');
-  fEmail.textContent = s.email;
-  fEmail.href = 'mailto:' + s.email;
-  const fPhone = $('#footer-phone');
-  fPhone.textContent = s.phone;
-  fPhone.href = 'https://wa.me/' + s.whatsapp;
-
-  // WhatsApp float
+  const fe = $('#footer-email'); fe.textContent = s.email; fe.href = 'mailto:' + s.email;
+  const fp = $('#footer-phone'); fp.textContent = s.phone; fp.href = 'https://wa.me/' + s.whatsapp;
   $('#whatsapp-float').href = 'https://wa.me/' + s.whatsapp;
-
-  // Typewriter
   window.__titles = s.typewriterTitles.split(',').map(t => t.trim()).filter(Boolean);
   if (!window.__titles.length) window.__titles = ['Educator'];
   restartTypewriter();
-
-  // Institutions
-  try {
-    const insts = Array.isArray(s.institutions) ? s.institutions : DEFAULT_INSTITUTIONS;
-    renderInstitutionsList(insts);
-  } catch (e) { console.error('Institutions error:', e); }
-}
-
-async function loadProfileImage() {
-  const img = $('#profile-img');
-  const previewImg = $('#profile-preview-img');
-  try {
-    const blob = await getFileBlob(PROFILE_KEY);
-    if (blob) {
-      if (profileUrl) URL.revokeObjectURL(profileUrl);
-      profileUrl = URL.createObjectURL(blob);
-      img.src = profileUrl;
-      if (previewImg) previewImg.src = profileUrl;
-    } else {
-      const fallback = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280"><rect width="280" height="280" fill="#0a0a12"/><circle cx="140" cy="100" r="50" fill="#8b5cf6"/><ellipse cx="140" cy="230" rx="80" ry="60" fill="#3b82f6"/><text x="140" y="270" text-anchor="middle" fill="#f0f0f5" font-size="12" font-family="sans-serif">No photo</text></svg>');
-      img.src = fallback;
-      if (previewImg) previewImg.src = fallback;
-    }
-  } catch (e) { console.error('Profile image error:', e); }
+  renderInstitutions(Array.isArray(s.institutions) ? s.institutions : DEFAULT_INSTITUTIONS);
 }
 
 /* ============================================================
-   9. TYPEWRITER (restartable)
+   10. PROFILE IMAGE (Supabase Storage)
+   ============================================================ */
+async function loadProfileImage() {
+  const img = $('#profile-img');
+  const preview = $('#profile-preview-img');
+  let url = '';
+  if (supabase) {
+    url = sbPublicUrl(PROFILE_PATH);
+    // Test if exists with a HEAD request; if 400/404, fallback
+    if (url) {
+      try {
+        const res = await fetch(url, { method: 'HEAD' });
+        if (!res.ok) url = '';
+      } catch { url = ''; }
+    }
+  }
+  if (!url) {
+    url = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280"><rect width="280" height="280" fill="#0a0a12"/><circle cx="140" cy="100" r="50" fill="#8b5cf6"/><ellipse cx="140" cy="230" rx="80" ry="60" fill="#3b82f6"/><text x="140" y="270" text-anchor="middle" fill="#f0f0f5" font-size="12" font-family="sans-serif">No photo</text></svg>');
+  } else {
+    url += '?v=' + Date.now();
+  }
+  if (profileUrl && profileUrl.startsWith('blob:')) URL.revokeObjectURL(profileUrl);
+  profileUrl = url;
+  img.src = url;
+  if (preview) preview.src = url;
+}
+
+/* ============================================================
+   11. TYPEWRITER
    ============================================================ */
 function restartTypewriter() {
   if (typewriterTimer) clearTimeout(typewriterTimer);
   twIdx = 0; twChar = 0; twDeleting = false;
   stepTypewriter();
 }
-
 function stepTypewriter() {
   const el = $('#typewriter');
   if (!el) return;
   const titles = window.__titles || ['Educator'];
-  const current = titles[twIdx];
+  const cur = titles[twIdx];
   if (!twDeleting) {
-    el.textContent = current.slice(0, ++twChar);
-    if (twChar === current.length) { twDeleting = true; typewriterTimer = setTimeout(stepTypewriter, 1800); return; }
+    el.textContent = cur.slice(0, ++twChar);
+    if (twChar === cur.length) { twDeleting = true; typewriterTimer = setTimeout(stepTypewriter, 1800); return; }
   } else {
-    el.textContent = current.slice(0, --twChar);
+    el.textContent = cur.slice(0, --twChar);
     if (twChar === 0) { twDeleting = false; twIdx = (twIdx + 1) % titles.length; }
   }
   typewriterTimer = setTimeout(stepTypewriter, twDeleting ? 45 : 85);
 }
 
 /* ============================================================
-   10. INSTITUTIONS
+   12. INSTITUTIONS
    ============================================================ */
-function renderInstitutionsList(insts) {
+function renderInstitutions(insts) {
   const grid = $('#institutions-grid');
   if (!grid) return;
   grid.innerHTML = insts.map((inst, i) => `
@@ -957,9 +929,9 @@ function renderInstitutionsList(insts) {
     </div>`).join('');
   $$('.inst-card').forEach(card => {
     const toggle = () => {
-      const expanded = card.classList.toggle('expanded');
-      card.setAttribute('aria-expanded', expanded);
-      card.querySelector('.inst-toggle').textContent = expanded ? 'Click to collapse ▴' : 'Click to expand ▾';
+      const exp = card.classList.toggle('expanded');
+      card.setAttribute('aria-expanded', exp);
+      card.querySelector('.inst-toggle').textContent = exp ? 'Click to collapse ▴' : 'Click to expand ▾';
     };
     card.addEventListener('click', toggle);
     card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
@@ -968,19 +940,24 @@ function renderInstitutionsList(insts) {
 }
 
 /* ============================================================
-   11. NOTES: LOAD / RENDER
+   13. NOTES: LOAD
    ============================================================ */
 async function loadNotes() {
-  const loading = $('#notes-loading');
-  const grid = $('#notes-grid');
-  const empty = $('#notes-empty');
+  const loading = $('#notes-loading'), grid = $('#notes-grid'), empty = $('#notes-empty');
   loading.style.display = 'grid';
   grid.innerHTML = '';
   empty.style.display = 'none';
 
+  if (!supabase) {
+    loading.style.display = 'none';
+    empty.style.display = 'block';
+    empty.innerHTML = `<div class="icon">⚠️</div><h3>Supabase unavailable</h3><p>SDK not loaded. Check internet.</p><button class="btn btn-outline btn-sm" onclick="loadNotes()" style="margin-top:1rem">Retry</button>`;
+    return;
+  }
+
   try {
-    const data = await getAllMeta();
-    allNotes = data.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at));
+    const notes = await sbFetchAllNotes();
+    allNotes = notes.sort((a, b) => new Date(b.uploaded_at || 0) - new Date(a.uploaded_at || 0));
     $('#notes-count').textContent = allNotes.length;
     loading.style.display = 'none';
     renderNotes();
@@ -989,17 +966,18 @@ async function loadNotes() {
     loading.style.display = 'none';
     empty.style.display = 'block';
     empty.innerHTML = `<div class="icon">⚠️</div><h3>Could not load notes</h3><p>${escapeHtml(err.message || String(err))}</p><button class="btn btn-outline btn-sm" onclick="loadNotes()" style="margin-top:1rem">Retry</button>`;
+    toast('Load failed: ' + (err.message || err), 'error');
   }
 }
 
 function populateFilters() {
-  const subjects = [...new Set(allNotes.map(n => n.subject).filter(Boolean))].sort();
-  const chapters = [...new Set(allNotes.map(n => n.chapter_name).filter(Boolean))].sort();
-  const subSel = $('#filter-subject'), chSel = $('#filter-chapter');
-  const sv = subSel.value, cv = chSel.value;
-  subSel.innerHTML = '<option value="">All Subjects</option>' + subjects.map(s => `<option>${escapeHtml(s)}</option>`).join('');
-  chSel.innerHTML = '<option value="">All Chapters</option>' + chapters.map(c => `<option>${escapeHtml(c)}</option>`).join('');
-  subSel.value = sv; chSel.value = cv;
+  const subs = [...new Set(allNotes.map(n => n.subject).filter(Boolean))].sort();
+  const chs = [...new Set(allNotes.map(n => n.chapter_name).filter(Boolean))].sort();
+  const ss = $('#filter-subject'), cs = $('#filter-chapter');
+  const sv = ss.value, cv = cs.value;
+  ss.innerHTML = '<option value="">All Subjects</option>' + subs.map(s => `<option>${escapeHtml(s)}</option>`).join('');
+  cs.innerHTML = '<option value="">All Chapters</option>' + chs.map(c => `<option>${escapeHtml(c)}</option>`).join('');
+  ss.value = sv; cs.value = cv;
 }
 
 function renderNotes() {
@@ -1018,75 +996,76 @@ function renderNotes() {
   if (!filtered.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
   empty.style.display = 'none';
   grid.innerHTML = filtered.map(n => {
-    const fileType = (n.file_name || '').split('.').pop().toUpperCase() || 'FILE';
-    return `<div class="note-card" data-id="${n.id}">
+    const ext = (n.file_name || '').split('.').pop().toUpperCase() || 'FILE';
+    return `<div class="note-card" data-id="${escapeHtml(n.id || '')}">
       <span class="note-badge">${escapeHtml(n.class_name || 'General')}</span>
       <h3 class="note-title">${escapeHtml(n.title || 'Untitled')}</h3>
       <div class="note-meta">
         <span>📘 ${escapeHtml(n.subject || '—')}</span>
-        <span>📄 ${fileType}</span>
+        <span>📄 ${ext}</span>
         <span>💾 ${formatBytes(n.file_size)}</span>
         <span>📅 ${formatDate(n.uploaded_at)}</span>
       </div>
-      <p class="note-desc">${escapeHtml(n.description || 'No description provided.')}</p>
+      <p class="note-desc">${escapeHtml(n.description || 'No description.')}</p>
       <div class="note-actions">
-        <button class="btn btn-sm btn-primary download-btn" data-id="${n.id}" data-name="${escapeHtml(n.file_name || 'note')}">⬇ Download</button>
-        ${isAdmin ? `<button class="btn btn-sm btn-outline edit-btn" data-id="${n.id}">✏ Edit</button>
-                     <button class="btn btn-sm btn-danger delete-btn" data-id="${n.id}">🗑 Delete</button>` : ''}
+        <button class="btn btn-sm btn-primary download-btn" data-id="${escapeHtml(n.id || '')}">⬇ Download</button>
+        ${isAdmin ? `<button class="btn btn-sm btn-outline edit-btn" data-id="${escapeHtml(n.id || '')}">✏ Edit</button>
+                     <button class="btn btn-sm btn-danger delete-btn" data-id="${escapeHtml(n.id || '')}">🗑 Delete</button>` : ''}
       </div>
     </div>`;
   }).join('');
-  grid.querySelectorAll('.download-btn').forEach(b => b.addEventListener('click', () => downloadFile(b.dataset.id, b.dataset.name)));
+  grid.querySelectorAll('.download-btn').forEach(b => b.addEventListener('click', () => downloadNote(b.dataset.id)));
   grid.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', () => openEditNote(b.dataset.id)));
   grid.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', () => {
-    deleteTargetId = b.dataset.id;
-    $('#delete-modal').classList.add('open');
+    deleteTargetNote = allNotes.find(n => n.id === b.dataset.id);
+    if (deleteTargetNote) $('#delete-modal').classList.add('open');
   }));
 }
 
 /* ============================================================
-   12. NOTES: DOWNLOAD
+   14. NOTES: DOWNLOAD
    ============================================================ */
-async function downloadFile(id, name) {
-  try {
-    const blob = await getFileBlob(id);
-    if (!blob) { toast('File not found.', 'error'); return; }
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = name || 'note';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-    toast('Download started.', 'success');
-  } catch (err) { toast('Download failed: ' + err.message, 'error'); }
+function downloadNote(id) {
+  const note = allNotes.find(n => n.id === id);
+  if (!note || !note.file_path) { toast('File not found.', 'error'); return; }
+  const url = sbPublicUrl(note.file_path);
+  if (!url) { toast('Download URL unavailable.', 'error'); return; }
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = note.file_name || 'note';
+  a.target = '_blank';
+  a.rel = 'noopener';
+  document.body.appendChild(a); a.click(); a.remove();
+  toast('Download started.', 'success');
 }
 
 /* ============================================================
-   13. NOTES: DELETE
+   15. NOTES: DELETE
    ============================================================ */
 async function confirmDelete() {
-  if (!deleteTargetId) return;
+  if (!deleteTargetNote) return;
   const btn = $('#delete-confirm');
   btn.disabled = true; btn.textContent = 'Deleting…';
   try {
-    await deleteFileBlob(deleteTargetId);
-    await deleteMeta(deleteTargetId);
+    if (deleteTargetNote.file_path) await sbDeleteFile(deleteTargetNote.file_path);
+    await sbDeleteNoteRow(deleteTargetNote._raw);
     $('#delete-modal').classList.remove('open');
     toast('Note deleted.', 'success');
     await loadNotes();
   } catch (err) {
-    toast('Delete failed: ' + err.message, 'error');
+    toast('Delete failed: ' + (err.message || err), 'error');
   } finally {
     btn.disabled = false; btn.textContent = 'Confirm Delete';
-    deleteTargetId = null;
+    deleteTargetNote = null;
   }
 }
 
 /* ============================================================
-   14. NOTES: UPLOAD
+   16. NOTES: UPLOAD
    ============================================================ */
-function handleFile(file) {
+function handleFileSelect(file) {
   const ext = (file.name.split('.').pop() || '').toLowerCase();
-  if (!ALLOWED_EXT.includes(ext) && !ALLOWED_MIME.includes(file.type)) { toast('File type not allowed.', 'error'); $('#up-file').value = ''; return; }
+  if (!ALLOWED_EXT.includes(ext)) { toast('File type not allowed.', 'error'); $('#up-file').value = ''; return; }
   if (file.size > MAX_SIZE) { toast('File exceeds 50 MB.', 'error'); $('#up-file').value = ''; return; }
   selectedFile = file;
   $('#file-drop-text').textContent = `${file.name} (${formatBytes(file.size)})`;
@@ -1095,81 +1074,109 @@ function handleFile(file) {
 async function handleUpload(e) {
   e.preventDefault();
   if (!isAdmin) { toast('Admin login required.', 'error'); return; }
+  if (!supabase) { toast('Supabase not available.', 'error'); return; }
   if (!selectedFile) { toast('Please select a file.', 'error'); return; }
+
   const cls = $('#up-class').value, subject = $('#up-subject').value;
   const title = $('#up-title').value.trim(), chapter = $('#up-chapter').value.trim(), desc = $('#up-desc').value.trim();
   if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
-  const id = 'note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+
+  const ext = selectedFile.name.split('.').pop().toLowerCase();
+  const file_path = `notes/${Date.now()}-${Math.random().toString(36).slice(2,9)}.${ext}`;
   const pw = $('#upload-progress'), pb = $('#upload-progress-bar');
-  pw.classList.add('visible'); pb.style.width = '30%';
+  pw.classList.add('visible'); pb.style.width = '20%';
+
   try {
-    await saveFileBlob(id, selectedFile);
-    pb.style.width = '70%';
-    await saveMeta({
-      id, title, class_name: cls, subject,
-      chapter_name: chapter || null, description: desc || null,
-      file_name: selectedFile.name, file_type: selectedFile.type,
-      file_size: selectedFile.size, uploaded_at: new Date().toISOString()
-    });
+    // 1) Upload file to Storage
+    await sbUploadFile(selectedFile, file_path);
+    pb.style.width = '60%';
+
+    // 2) Insert metadata row
+    const metadata = {
+      id: genId(),
+      title, class_name: cls, subject,
+      chapter_name: chapter || null,
+      description: desc || null,
+      file_path, file_name: selectedFile.name,
+      file_type: selectedFile.type, file_size: selectedFile.size,
+      uploaded_at: new Date().toISOString()
+    };
+    await sbInsertNote(metadata);
     pb.style.width = '100%';
+
     setTimeout(() => { pw.classList.remove('visible'); pb.style.width = '0%'; }, 600);
-    toast('Note uploaded.', 'success');
+    toast('Note uploaded to Supabase.', 'success');
     e.target.reset(); selectedFile = null;
     $('#file-drop-text').textContent = 'Click or drag file';
     await loadNotes();
   } catch (err) {
     pw.classList.remove('visible'); pb.style.width = '0%';
-    try { await deleteFileBlob(id); } catch {}
-    toast('Upload failed: ' + err.message, 'error');
+    try { await sbDeleteFile(file_path); } catch {}
+    toast('Upload failed: ' + (err.message || err), 'error');
   }
 }
 
 /* ============================================================
-   15. NOTES: EDIT
+   17. NOTES: EDIT
    ============================================================ */
-async function openEditNote(id) {
-  try {
-    const meta = await getMeta(id);
-    if (!meta) { toast('Note not found.', 'error'); return; }
-    currentEditId = id;
-    $('#edit-class').value = meta.class_name || '';
-    $('#edit-subject').value = meta.subject || '';
-    $('#edit-title').value = meta.title || '';
-    $('#edit-chapter').value = meta.chapter_name || '';
-    $('#edit-desc').value = meta.description || '';
-    $('#edit-file').value = '';
-    $('#edit-note-modal').classList.add('open');
-  } catch (err) { toast('Could not load note: ' + err.message, 'error'); }
+function openEditNote(id) {
+  const note = allNotes.find(n => n.id === id);
+  if (!note) { toast('Note not found.', 'error'); return; }
+  currentEditNote = note;
+  $('#edit-class').value = note.class_name || '';
+  $('#edit-subject').value = note.subject || '';
+  $('#edit-title').value = note.title || '';
+  $('#edit-chapter').value = note.chapter_name || '';
+  $('#edit-desc').value = note.description || '';
+  $('#edit-file').value = '';
+  $('#edit-note-modal').classList.add('open');
 }
 
 async function handleEditSubmit(e) {
   e.preventDefault();
-  if (!currentEditId) return;
+  if (!currentEditNote) return;
+  const cls = $('#edit-class').value, subject = $('#edit-subject').value;
+  const title = $('#edit-title').value.trim(), chapter = $('#edit-chapter').value.trim(), desc = $('#edit-desc').value.trim();
+  if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
+
+  const updated = {
+    ...currentEditNote,
+    title, class_name: cls, subject,
+    chapter_name: chapter || null,
+    description: desc || null
+  };
+  delete updated._raw;
+
   try {
-    const meta = await getMeta(currentEditId);
-    if (!meta) { toast('Note not found.', 'error'); return; }
-    const cls = $('#edit-class').value, subject = $('#edit-subject').value;
-    const title = $('#edit-title').value.trim(), chapter = $('#edit-chapter').value.trim(), desc = $('#edit-desc').value.trim();
-    if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
-    let extra = {};
     const newFile = $('#edit-file').files[0];
     if (newFile) {
-      const ext = (newFile.name.split('.').pop() || '').toLowerCase();
-      if (!ALLOWED_EXT.includes(ext) && !ALLOWED_MIME.includes(newFile.type)) { toast('Invalid file type.', 'error'); return; }
+      const ext = newFile.name.split('.').pop().toLowerCase();
+      if (!ALLOWED_EXT.includes(ext)) { toast('Invalid file type.', 'error'); return; }
       if (newFile.size > MAX_SIZE) { toast('File too large.', 'error'); return; }
-      await saveFileBlob(currentEditId, newFile);
-      extra = { file_name: newFile.name, file_type: newFile.type, file_size: newFile.size };
+      const newPath = `notes/${Date.now()}-${Math.random().toString(36).slice(2,9)}.${ext}`;
+      await sbUploadFile(newFile, newPath);
+      if (currentEditNote.file_path) await sbDeleteFile(currentEditNote.file_path);
+      updated.file_path = newPath;
+      updated.file_name = newFile.name;
+      updated.file_type = newFile.type;
+      updated.file_size = newFile.size;
     }
-    await saveMeta({ ...meta, title, class_name: cls, subject, chapter_name: chapter || null, description: desc || null, ...extra });
+
+    // Update row: delete old, insert new
+    await sbDeleteNoteRow(currentEditNote._raw);
+    await sbInsertNote(updated);
+
     toast('Note updated.', 'success');
     $('#edit-note-modal').classList.remove('open');
-    currentEditId = null;
+    currentEditNote = null;
     await loadNotes();
-  } catch (err) { toast('Update failed: ' + err.message, 'error'); }
+  } catch (err) {
+    toast('Update failed: ' + (err.message || err), 'error');
+  }
 }
 
 /* ============================================================
-   16. ADMIN TAB SWITCHING
+   18. ADMIN TABS
    ============================================================ */
 function bindAdminTabs() {
   $$('.admin-tab').forEach(tab => {
@@ -1177,9 +1184,8 @@ function bindAdminTabs() {
       $$('.admin-tab').forEach(t => t.classList.remove('active'));
       tab.classList.add('active');
       $$('.admin-tab-content').forEach(c => c.classList.remove('active'));
-      const target = $('#tab-' + tab.dataset.tab);
-      if (target) target.classList.add('active');
-      // Refresh form data when opening a tab
+      const t = $('#tab-' + tab.dataset.tab);
+      if (t) t.classList.add('active');
       if (tab.dataset.tab === 'profile') loadProfileTab();
       if (tab.dataset.tab === 'content') loadContentTab();
       if (tab.dataset.tab === 'contact') loadContactTab();
@@ -1189,36 +1195,37 @@ function bindAdminTabs() {
 }
 
 /* ============================================================
-   17. ADMIN: PROFILE TAB
+   19. PROFILE TAB
    ============================================================ */
-async function loadProfileTab() {
+function loadProfileTab() {
   const s = getSettings();
   $('#profile-name-input').value = s.profileName;
   $('#profile-titles-input').value = s.typewriterTitles;
-  await loadProfileImage();
+  loadProfileImage();
 }
 
 function bindProfileTab() {
   $('#profile-file-input').addEventListener('change', async e => {
     const file = e.target.files[0];
     if (!file) return;
-    if (!file.type.startsWith('image/')) { toast('Please select an image.', 'error'); return; }
+    if (!file.type.startsWith('image/')) { toast('Select an image.', 'error'); return; }
     if (file.size > 5 * 1024 * 1024) { toast('Image too large (max 5 MB).', 'error'); return; }
+    if (!supabase) { toast('Supabase unavailable.', 'error'); return; }
     try {
-      await saveFileBlob(PROFILE_KEY, file);
+      await sbUploadFile(file, PROFILE_PATH);
       await loadProfileImage();
-      toast('Profile photo updated.', 'success');
-    } catch (err) { toast('Upload failed: ' + err.message, 'error'); }
+      toast('Profile photo uploaded to Supabase.', 'success');
+    } catch (err) { toast('Upload failed: ' + (err.message || err), 'error'); }
     e.target.value = '';
   });
 
   $('#profile-remove-btn').addEventListener('click', async () => {
     if (!confirm('Remove profile photo?')) return;
     try {
-      await deleteFileBlob(PROFILE_KEY);
+      await sbDeleteFile(PROFILE_PATH);
       await loadProfileImage();
       toast('Profile photo removed.', 'success');
-    } catch (err) { toast('Remove failed: ' + err.message, 'error'); }
+    } catch (err) { toast('Remove failed: ' + (err.message || err), 'error'); }
   });
 
   $('#profile-form').addEventListener('submit', e => {
@@ -1233,7 +1240,7 @@ function bindProfileTab() {
 }
 
 /* ============================================================
-   18. ADMIN: CONTENT TAB
+   20. CONTENT TAB
    ============================================================ */
 function loadContentTab() {
   const s = getSettings();
@@ -1242,7 +1249,6 @@ function loadContentTab() {
   $('#content-about-1').value = s.aboutText1;
   $('#content-about-2').value = s.aboutText2;
 }
-
 function bindContentTab() {
   $('#content-form').addEventListener('submit', e => {
     e.preventDefault();
@@ -1251,14 +1257,13 @@ function bindContentTab() {
     s.heroSubtitle = $('#content-hero-subtitle').value;
     s.aboutText1 = $('#content-about-1').value;
     s.aboutText2 = $('#content-about-2').value;
-    saveSettings(s);
-    applySettings();
+    saveSettings(s); applySettings();
     toast('Content saved.', 'success');
   });
 }
 
 /* ============================================================
-   19. ADMIN: CONTACT TAB
+   21. CONTACT TAB
    ============================================================ */
 function loadContactTab() {
   const s = getSettings();
@@ -1267,7 +1272,6 @@ function loadContactTab() {
   $('#contact-wa-input').value = s.whatsapp;
   $('#contact-location-input').value = s.location;
 }
-
 function bindContactTab() {
   $('#contact-form-admin').addEventListener('submit', e => {
     e.preventDefault();
@@ -1276,60 +1280,39 @@ function bindContactTab() {
     s.phone = $('#contact-phone-input').value.trim();
     s.whatsapp = $('#contact-wa-input').value.replace(/\D/g, '');
     s.location = $('#contact-location-input').value.trim();
-    saveSettings(s);
-    applySettings();
-    toast('Contact info saved.', 'success');
+    saveSettings(s); applySettings();
+    toast('Contact saved.', 'success');
   });
 }
 
 /* ============================================================
-   20. ADMIN: INSTITUTIONS TAB
+   22. INSTITUTIONS TAB
    ============================================================ */
 function loadInstitutionsTab() {
   const s = getSettings();
   $('#institutions-json').value = JSON.stringify(s.institutions, null, 2);
 }
-
 function bindInstitutionsTab() {
   $('#save-institutions-btn').addEventListener('click', () => {
     try {
       const parsed = JSON.parse($('#institutions-json').value);
       if (!Array.isArray(parsed)) throw new Error('Must be a JSON array');
-      const s = getSettings();
-      s.institutions = parsed;
-      saveSettings(s);
-      applySettings();
+      const s = getSettings(); s.institutions = parsed;
+      saveSettings(s); applySettings();
       toast('Institutions saved.', 'success');
     } catch (err) { toast('Invalid JSON: ' + err.message, 'error'); }
   });
   $('#reset-institutions-btn').addEventListener('click', () => {
-    if (!confirm('Reset institutions to defaults?')) return;
+    if (!confirm('Reset to defaults?')) return;
     const s = getSettings();
     s.institutions = JSON.parse(JSON.stringify(DEFAULT_INSTITUTIONS));
-    saveSettings(s);
-    loadInstitutionsTab();
-    applySettings();
-    toast('Institutions reset.', 'success');
+    saveSettings(s); loadInstitutionsTab(); applySettings();
+    toast('Reset done.', 'success');
   });
 }
 
 /* ============================================================
-   21. ADMIN: SECURITY TAB
-   ============================================================ */
-function bindSecurityTab() {
-  $('#password-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const cur = $('#pwd-current').value, n1 = $('#pwd-new').value, n2 = $('#pwd-confirm').value;
-    if (n1 !== n2) { toast('Passwords do not match.', 'error'); return; }
-    const err = changePassword(cur, n1);
-    if (err) { toast(err, 'error'); return; }
-    toast('Password updated.', 'success');
-    e.target.reset();
-  });
-}
-
-/* ============================================================
-   22. AUTH UI
+   23. AUTH UI
    ============================================================ */
 function setAdminState(admin) {
   isAdmin = admin;
@@ -1349,8 +1332,7 @@ function bindAuth() {
   $('#login-modal').addEventListener('click', e => { if (e.target === e.currentTarget) $('#login-modal').classList.remove('open'); });
   $('#login-form').addEventListener('submit', e => {
     e.preventDefault();
-    const pwd = $('#login-password').value;
-    if (login(pwd)) {
+    if (login($('#login-password').value)) {
       $('#login-modal').classList.remove('open');
       $('#login-password').value = '';
       setAdminState(true);
@@ -1363,13 +1345,11 @@ function bindAuth() {
       $('#login-password').focus();
     }
   });
-  $('#logout-btn').addEventListener('click', () => {
-    logout(); setAdminState(false); toast('Logged out.', 'info'); loadNotes();
-  });
+  $('#logout-btn').addEventListener('click', () => { logout(); setAdminState(false); toast('Logged out.', 'info'); loadNotes(); });
 }
 
 /* ============================================================
-   23. NOTES UI BINDINGS
+   24. NOTES UI
    ============================================================ */
 function bindNotesUI() {
   $('#notes-search').addEventListener('input', e => { currentSearch = e.target.value; renderNotes(); });
@@ -1398,15 +1378,15 @@ function bindNotesUI() {
 }
 
 /* ============================================================
-   24. UPLOAD UI
+   25. UPLOAD UI
    ============================================================ */
 function bindUpload() {
   const fd = $('#file-drop'), fi = $('#up-file');
   fd.addEventListener('click', () => fi.click());
   fd.addEventListener('dragover', e => { e.preventDefault(); fd.classList.add('dragover'); });
   fd.addEventListener('dragleave', () => fd.classList.remove('dragover'));
-  fd.addEventListener('drop', e => { e.preventDefault(); fd.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
-  fi.addEventListener('change', () => { if (fi.files.length) handleFile(fi.files[0]); });
+  fd.addEventListener('drop', e => { e.preventDefault(); fd.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]); });
+  fi.addEventListener('change', () => { if (fi.files.length) handleFileSelect(fi.files[0]); });
   $('#upload-form').addEventListener('submit', handleUpload);
   $('#upload-cancel').addEventListener('click', () => {
     $('#upload-form').reset();
@@ -1419,46 +1399,43 @@ function bindUpload() {
 }
 
 /* ============================================================
-   25. DELETE UI
+   26. DELETE UI
    ============================================================ */
 function bindDelete() {
-  $('#delete-cancel').addEventListener('click', () => { $('#delete-modal').classList.remove('open'); deleteTargetId = null; });
-  $('#delete-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#delete-modal').classList.remove('open'); deleteTargetId = null; } });
+  $('#delete-cancel').addEventListener('click', () => { $('#delete-modal').classList.remove('open'); deleteTargetNote = null; });
+  $('#delete-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#delete-modal').classList.remove('open'); deleteTargetNote = null; } });
   $('#delete-confirm').addEventListener('click', confirmDelete);
 }
 
 /* ============================================================
-   26. EDIT NOTE UI
+   27. EDIT NOTE UI
    ============================================================ */
 function bindEditNote() {
   $('#edit-note-form').addEventListener('submit', handleEditSubmit);
-  $('#edit-cancel').addEventListener('click', () => { $('#edit-note-modal').classList.remove('open'); currentEditId = null; });
-  $('#edit-note-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#edit-note-modal').classList.remove('open'); currentEditId = null; } });
+  $('#edit-cancel').addEventListener('click', () => { $('#edit-note-modal').classList.remove('open'); currentEditNote = null; });
+  $('#edit-note-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#edit-note-modal').classList.remove('open'); currentEditNote = null; } });
 }
 
 /* ============================================================
-   27. STUDENT CONTACT FORM
+   28. STUDENT CONTACT FORM
    ============================================================ */
 function bindContactForm() {
   $('#student-contact-form').addEventListener('submit', e => {
     e.preventDefault();
     const s = getSettings();
-    const name = $('#cf-name').value.trim();
-    const email = $('#cf-email').value.trim();
-    const cls = $('#cf-class').value;
-    const school = $('#cf-school').value.trim();
-    const subject = $('#cf-subject').value.trim();
-    const message = $('#cf-message').value.trim();
-    if (!name || !email || !cls || !school || !subject || !message) { toast('Please fill all fields.', 'error'); return; }
+    const name = $('#cf-name').value.trim(), email = $('#cf-email').value.trim();
+    const cls = $('#cf-class').value, school = $('#cf-school').value.trim();
+    const subj = $('#cf-subject').value.trim(), msg = $('#cf-message').value.trim();
+    if (!name || !email || !cls || !school || !subj || !msg) { toast('Fill all fields.', 'error'); return; }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Invalid email.', 'error'); return; }
-    const text = `*Student Message*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Class:* ${encodeURIComponent(cls)}%0A*School/College:* ${encodeURIComponent(school)}%0A*Subject:* ${encodeURIComponent(subject)}%0A%0A*Message:*%0A${encodeURIComponent(message)}`;
+    const text = `*Student Message*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Class:* ${encodeURIComponent(cls)}%0A*School:* ${encodeURIComponent(school)}%0A*Subject:* ${encodeURIComponent(subj)}%0A%0A*Message:*%0A${encodeURIComponent(msg)}`;
     window.open(`https://wa.me/${s.whatsapp}?text=${text}`, '_blank', 'noopener');
     toast('Opening WhatsApp…', 'info');
   });
 }
 
 /* ============================================================
-   28. NAV / THEME / MISC
+   29. NAV / THEME / MISC
    ============================================================ */
 function bindNav() {
   $('#hamburger').addEventListener('click', () => {
@@ -1500,7 +1477,7 @@ function bindAccordion() {
 }
 
 /* ============================================================
-   29. OBSERVERS / COUNTERS / PARTICLES
+   30. OBSERVERS / COUNTERS / PARTICLES
    ============================================================ */
 let revealObserver;
 function observeReveals() {
@@ -1513,53 +1490,80 @@ function observeReveals() {
 
 function animateCounters() {
   $$('.counter-num[data-target]').forEach(el => {
-    const target = +el.dataset.target;
-    let cur = 0;
-    const step = Math.max(1, Math.floor(target / 40));
+    const t = +el.dataset.target;
+    let c = 0;
+    const step = Math.max(1, Math.floor(t/40));
     const iv = setInterval(() => {
-      cur += step;
-      if (cur >= target) { cur = target; clearInterval(iv); }
-      el.textContent = cur;
+      c += step;
+      if (c >= t) { c = t; clearInterval(iv); }
+      el.textContent = c;
     }, 30);
   });
 }
 
 function createParticles() {
-  const wrap = $('#hero-particles');
-  if (!wrap) return;
+  const w = $('#hero-particles');
+  if (!w) return;
   for (let i = 0; i < 18; i++) {
     const p = document.createElement('div');
     p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.top = Math.random() * 100 + '%';
-    p.style.animationDelay = Math.random() * 10 + 's';
-    p.style.animationDuration = (10 + Math.random() * 10) + 's';
-    p.style.background = ['#8b5cf6','#3b82f6','#06b6d4'][i % 3];
-    wrap.appendChild(p);
+    p.style.left = Math.random()*100 + '%';
+    p.style.top = Math.random()*100 + '%';
+    p.style.animationDelay = Math.random()*10 + 's';
+    p.style.animationDuration = (10+Math.random()*10) + 's';
+    p.style.background = ['#8b5cf6','#3b82f6','#06b6d4'][i%3];
+    w.appendChild(p);
   }
 }
 
 /* ============================================================
-   30. INIT
+   31. STORAGE STATUS PILL
+   ============================================================ */
+async function updateStorageStatus() {
+  const el = $('#storage-status'), text = $('#storage-text');
+  if (!supabase) {
+    el.className = 'error';
+    text.textContent = 'Supabase SDK not loaded';
+    return;
+  }
+  const res = await sbPing();
+  if (res.ok) {
+    el.className = 'ready';
+    text.textContent = 'Supabase connected';
+  } else {
+    el.className = 'error';
+    text.textContent = res.msg;
+  }
+}
+
+/* ============================================================
+   32. INIT
    ============================================================ */
 async function init() {
   try {
     initTheme(); bindTheme();
     bindAuth(); bindNav(); bindAccordion(); bindAdminTabs();
-    bindProfileTab(); bindContentTab(); bindContactTab(); bindInstitutionsTab(); bindSecurityTab();
+    bindProfileTab(); bindContentTab(); bindContactTab(); bindInstitutionsTab();
     bindNotesUI(); bindUpload(); bindDelete(); bindEditNote(); bindContactForm();
     createParticles(); observeReveals(); animateCounters();
     applySettings();
     await loadProfileImage();
-    await checkStorageStatus();
   } catch (e) { console.error('UI init error:', e); }
 
-  setTimeout(() => $('#loader').classList.add('hidden'), 400);
+  // Hide loader early — don't wait for network
+  setTimeout(() => $('#loader').classList.add('hidden'), 500);
+
+  // Restore admin session
   setAdminState(isAdminLoggedIn());
-  try { await loadNotes(); } catch (e) { console.error('loadNotes:', e); }
+
+  // Test Supabase + load notes
+  try { await updateStorageStatus(); } catch (e) { console.error('Status:', e); }
+  try { await loadNotes(); } catch (e) { console.error('Notes:', e); }
 }
 
-setTimeout(() => $('#loader').classList.add('hidden'), 4000);
+// Safety net — never leave user stuck on loader
+setTimeout(() => $('#loader').classList.add('hidden'), 5000);
+
 document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
