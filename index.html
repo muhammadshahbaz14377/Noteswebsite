@@ -1,577 +1,1566 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en" data-theme="dark">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CS Learning Portal | Computer Science Notes</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#eef2ff',
-                            100: '#e0e7ff',
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                            700: '#4338ca',
-                            900: '#312e81',
-                        }
-                    },
-                    animation: {
-                        'float': 'float 6s ease-in-out infinite',
-                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
-                        'gradient-x': 'gradientX 8s ease infinite',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0px)' },
-                            '50%': { transform: 'translateY(-15px)' },
-                        },
-                        pulseGlow: {
-                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
-                            '50%': { opacity: '0.8', transform: 'scale(1.05)' },
-                        },
-                        gradientX: {
-                            '0%, 100%': { 'background-size': '200% 200%', 'background-position': 'left center' },
-                            '50%': { 'background-size': '200% 200%', 'background-position': 'right center' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        .glass-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glass-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(99, 102, 241, 0.4);
-            box-shadow: 0 20px 30px -10px rgba(79, 70, 229, 0.25);
-        }
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Muhammad Shahbaz | Computer Science Notes</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>MS</text></svg>">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#050508;--bg-2:#0a0a12;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--text:#f0f0f5;--muted:#8a8a9a;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#06b6d4;--violet:#a855f7;--grad:linear-gradient(135deg,#8b5cf6,#3b82f6,#06b6d4);--glow:0 0 40px rgba(139,92,246,.35);--radius:18px;--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--transition:.3s cubic-bezier(.4,0,.2,1)}
+[data-theme="light"]{--bg:#f4f4f8;--bg-2:#fff;--surface:rgba(0,0,0,.04);--border:rgba(0,0,0,.1);--text:#0a0a12;--muted:#5a5a6a;--glow:0 0 40px rgba(139,92,246,.2)}
+html{scroll-behavior:smooth}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;min-height:100vh;background-image:radial-gradient(ellipse 80% 50% at 50% -10%,rgba(139,92,246,.15),transparent),radial-gradient(ellipse 60% 40% at 80% 100%,rgba(6,182,212,.08),transparent)}
+a{color:var(--cyan);text-decoration:none;transition:color var(--transition)}a:hover{color:var(--purple)}
+img{max-width:100%;display:block}
+button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
+button{cursor:pointer;border:none;background:none}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:4px}
+.container{width:min(1200px,92%);margin-inline:auto}
+.gradient-text{background:var(--grad);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.8rem;border-radius:50px;font-weight:600;font-size:.95rem;transition:var(--transition);border:1px solid transparent;white-space:nowrap}
+.btn-primary{background:var(--grad);color:#fff;box-shadow:var(--glow)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(139,92,246,.55)}
+.btn-outline{border-color:var(--border);color:var(--text);background:var(--surface)}
+.btn-outline:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-3px)}
+.btn-sm{padding:.5rem 1.2rem;font-size:.85rem}
+.btn-danger{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#f87171}
+.btn-danger:hover{background:rgba(239,68,68,.3)}
+#scroll-progress{position:fixed;top:0;left:0;height:3px;background:var(--grad);z-index:1000;width:0%;transition:width .1s linear}
+#loader{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:1.5rem;transition:opacity .6s,visibility .6s}
+#loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+.spinner{width:60px;height:60px;border-radius:50%;border:3px solid transparent;border-top-color:var(--purple);border-right-color:var(--cyan);animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+#main-header{position:fixed;top:0;left:0;right:0;z-index:900;padding:1rem 0;transition:var(--transition);background:rgba(5,5,8,.7);backdrop-filter:blur(24px);border-bottom:1px solid transparent}
+[data-theme="light"] #main-header{background:rgba(244,244,248,.8)}
+#main-header.scrolled{border-bottom-color:var(--border);box-shadow:0 10px 40px rgba(0,0,0,.4)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.logo{display:flex;align-items:center;gap:.6rem;font-weight:800;font-size:1.3rem;letter-spacing:-.02em}
+.logo-mark{width:42px;height:42px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-size:1.1rem;color:#fff;font-weight:900;box-shadow:var(--glow);animation:pulse-glow 3s ease-in-out infinite}
+@keyframes pulse-glow{0%,100%{box-shadow:0 0 20px rgba(139,92,246,.4)}50%{box-shadow:0 0 45px rgba(6,182,212,.6)}}
+.nav-links{display:flex;align-items:center;gap:.25rem;list-style:none}
+.nav-links > li > a,.nav-links > li > button{padding:.55rem .9rem;border-radius:10px;font-size:.9rem;font-weight:500;color:var(--muted);transition:var(--transition);display:flex;align-items:center;gap:.3rem}
+.nav-links > li > a:hover,.nav-links > li > button:hover{color:var(--text);background:var(--surface)}
+.dropdown{position:relative}
+.dropdown-menu{position:absolute;top:calc(100% + 10px);left:0;min-width:220px;background:var(--bg-2);border:1px solid var(--border);border-radius:14px;padding:.5rem;opacity:0;visibility:hidden;transform:translateY(-8px);transition:var(--transition);box-shadow:0 20px 60px rgba(0,0,0,.5);z-index:50}
+.dropdown:hover .dropdown-menu,.dropdown:focus-within .dropdown-menu{opacity:1;visibility:visible;transform:translateY(0)}
+.dropdown-menu a{display:block;padding:.6rem 1rem;border-radius:8px;font-size:.88rem;color:var(--muted)}
+.dropdown-menu a:hover{background:var(--surface);color:var(--cyan)}
+.header-actions{display:flex;align-items:center;gap:.6rem}
+.theme-toggle{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--surface);border:1px solid var(--border);font-size:1.1rem;transition:var(--transition)}
+.theme-toggle:hover{border-color:var(--cyan);transform:rotate(20deg)}
+.hamburger{display:none;flex-direction:column;gap:5px;padding:.5rem;z-index:1001}
+.hamburger span{width:24px;height:2px;background:var(--text);border-radius:2px;transition:var(--transition)}
+.hamburger.active span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.hamburger.active span:nth-child(2){opacity:0}
+.hamburger.active span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+#home{min-height:100vh;display:flex;align-items:center;padding:8rem 0 4rem;position:relative;overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
+.hero-content h1{font-size:clamp(2.2rem,4.5vw,3.6rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;margin-bottom:1.2rem}
+.hero-content p.lead{font-size:1.1rem;color:var(--muted);max-width:520px;margin-bottom:2rem}
+.hero-buttons{display:flex;gap:1rem;flex-wrap:wrap}
+.hero-visual{display:flex;flex-direction:column;align-items:center;gap:1.5rem}
+.avatar-wrap{position:relative;width:280px;height:280px;perspective:1000px}
+.avatar-ring{position:absolute;inset:-8px;border-radius:50%;background:conic-gradient(from 0deg,var(--purple),var(--blue),var(--cyan),var(--violet),var(--purple));animation:rotate-ring 6s linear infinite;filter:blur(2px);opacity:.8}
+@keyframes rotate-ring{to{transform:rotate(360deg)}}
+.avatar-inner{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:4px solid var(--bg);background:var(--bg-2);transition:transform .6s cubic-bezier(.34,1.56,.64,1),box-shadow .6s;transform-style:preserve-3d}
+.avatar-inner img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avatar-inner:hover{transform:translateZ(30px) scale(1.04);box-shadow:0 30px 80px rgba(139,92,246,.5)}
+.hero-name{font-size:1.5rem;font-weight:700;text-align:center}
+.typewriter{font-size:1rem;color:var(--cyan);font-weight:600;text-align:center;min-height:1.5em;letter-spacing:.02em}
+.typewriter::after{content:'|';animation:blink .8s step-end infinite;color:var(--purple)}
+@keyframes blink{50%{opacity:0}}
+.hero-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:4px;height:4px;border-radius:50%;background:var(--purple);opacity:.3;animation:float-particle 12s ease-in-out infinite}
+@keyframes float-particle{0%,100%{transform:translate(0,0)}25%{transform:translate(30px,-40px)}50%{transform:translate(-20px,-80px)}75%{transform:translate(40px,-120px)}}
+section{padding:5rem 0;position:relative}
+.section-header{text-align:center;margin-bottom:3rem}
+.section-header h2{font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:800;letter-spacing:-.03em;margin-bottom:.6rem}
+.section-header p{color:var(--muted);max-width:600px;margin-inline:auto}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:translateY(0)}
+.about-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:3rem;align-items:start}
+.about-text p{color:var(--muted);margin-bottom:1rem;font-size:1.02rem}
+.info-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.8rem;margin-top:1.5rem}
+.info-card{padding:1rem;border-radius:14px;background:var(--surface);border:1px solid var(--border);transition:var(--transition)}
+.info-card:hover{border-color:var(--purple);transform:translateY(-4px)}
+.info-card strong{display:block;font-size:.9rem;margin-bottom:.2rem}
+.info-card span{font-size:.78rem;color:var(--muted)}
+.counters{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+.counter-card{padding:1.5rem;border-radius:16px;background:var(--surface);border:1px solid var(--border);text-align:center;transition:var(--transition)}
+.counter-card:hover{border-color:var(--cyan);transform:scale(1.03)}
+.counter-num{font-size:2.2rem;font-weight:800;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.counter-label{font-size:.8rem;color:var(--muted);margin-top:.3rem}
+.inst-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:1.2rem}
+.inst-card{padding:1.5rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:var(--transition);position:relative;overflow:hidden}
+.inst-card::before{content:'';position:absolute;inset:0;border-radius:var(--radius);padding:1px;background:var(--grad);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;opacity:0;transition:opacity var(--transition)}
+.inst-card:hover::before{opacity:1}
+.inst-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,.4)}
+.inst-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.8rem}
+.inst-icon{width:48px;height:48px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-size:1.3rem;flex-shrink:0}
+.inst-header h3{font-size:1.05rem}
+.inst-role{font-size:.8rem;color:var(--cyan);font-weight:600}
+.inst-desc{font-size:.88rem;color:var(--muted);max-height:0;overflow:hidden;transition:max-height .5s ease}
+.inst-card.expanded .inst-desc{max-height:300px;margin-top:.6rem}
+.inst-toggle{font-size:.75rem;color:var(--purple);margin-top:.6rem;display:inline-block}
+.accordion-item{border:1px solid var(--border);border-radius:14px;margin-bottom:.8rem;overflow:hidden;background:var(--surface)}
+.accordion-header{width:100%;padding:1.1rem 1.4rem;display:flex;justify-content:space-between;align-items:center;font-weight:600;text-align:left;transition:background var(--transition)}
+.accordion-header:hover{background:rgba(255,255,255,.03)}
+.accordion-body{max-height:0;overflow:hidden;transition:max-height .5s ease}
+.accordion-body-inner{padding:1rem 1.4rem 1.4rem;color:var(--muted);font-size:.9rem}
+.accordion-item.open .accordion-body{max-height:400px}
+.accordion-item.open .accordion-arrow{transform:rotate(180deg)}
+.accordion-arrow{transition:transform var(--transition)}
+.notes-toolbar{display:flex;gap:1rem;flex-wrap:wrap;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.search-box{position:relative;flex:1;min-width:240px}
+.search-box input{width:100%;padding:.85rem 1rem .85rem 2.8rem;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text);transition:var(--transition)}
+.search-box input:focus{border-color:var(--cyan);outline:none;box-shadow:0 0 0 3px rgba(6,182,212,.15)}
+.search-box svg{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:var(--muted);width:18px;height:18px}
+.filter-selects{display:flex;gap:.6rem;flex-wrap:wrap}
+.filter-selects select{padding:.7rem 1rem;border-radius:10px;background:var(--surface);border:1px solid var(--border);color:var(--text)}
+.class-tabs{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:1.5rem}
+.class-tab{padding:.5rem 1.1rem;border-radius:50px;font-size:.85rem;font-weight:500;background:var(--surface);border:1px solid var(--border);color:var(--muted);transition:var(--transition)}
+.class-tab.active,.class-tab:hover{background:var(--grad);color:#fff;border-color:transparent}
+.notes-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.2rem}
+.note-card{padding:1.4rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);transition:var(--transition);display:flex;flex-direction:column}
+.note-card:hover{border-color:var(--purple);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.3)}
+.note-badge{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.7rem;font-weight:600;background:rgba(139,92,246,.15);color:var(--purple);margin-bottom:.6rem}
+.note-title{font-size:1.05rem;font-weight:700;margin-bottom:.3rem}
+.note-meta{font-size:.78rem;color:var(--muted);display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:.8rem}
+.note-desc{font-size:.85rem;color:var(--muted);flex:1;margin-bottom:1rem;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.note-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.empty-state{text-align:center;padding:3rem 1rem;color:var(--muted)}
+.empty-state .icon{font-size:3rem;margin-bottom:1rem;opacity:.5}
+.loading-skeleton{height:200px;border-radius:var(--radius);background:linear-gradient(90deg,var(--surface) 25%,rgba(255,255,255,.08) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.admin-panel{margin-top:2rem;display:none}
+.admin-panel.visible{display:block}
+.admin-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;border-bottom:1px solid var(--border);padding-bottom:.5rem;overflow-x:auto}
+.admin-tab{padding:.6rem 1.2rem;border-radius:10px;font-size:.85rem;font-weight:600;background:var(--surface);border:1px solid var(--border);color:var(--muted);transition:var(--transition);white-space:nowrap}
+.admin-tab.active{background:var(--grad);color:#fff;border-color:transparent}
+.admin-tab-content{padding:1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:none}
+.admin-tab-content.active{display:block}
+.admin-notice{padding:.9rem 1.2rem;border-radius:12px;background:rgba(6,182,212,.1);border:1px solid rgba(6,182,212,.3);font-size:.82rem;color:var(--cyan);margin-bottom:1.2rem}
+.admin-form{padding:1.8rem;border-radius:var(--radius);background:var(--bg-2);border:1px solid var(--border);margin-bottom:2rem}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.form-group{display:flex;flex-direction:column;gap:.4rem;margin-bottom:.5rem}
+.form-group.full{grid-column:1/-1}
+.form-group label{font-size:.8rem;font-weight:600;color:var(--muted)}
+.form-group input,.form-group select,.form-group textarea{padding:.75rem 1rem;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--text);transition:var(--transition)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--cyan);outline:none}
+.form-group small{font-size:.72rem;color:var(--muted);margin-top:.2rem}
+.file-drop{border:2px dashed var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:var(--transition);cursor:pointer}
+.file-drop:hover,.file-drop.dragover{border-color:var(--purple);background:rgba(139,92,246,.05)}
+.file-drop input{display:none}
+.upload-progress{height:8px;border-radius:10px;background:var(--border);overflow:hidden;margin-top:1rem;display:none}
+.upload-progress.visible{display:block}
+.upload-progress-bar{height:100%;width:0%;background:var(--grad);transition:width .3s ease}
+.profile-preview{display:flex;align-items:center;gap:1rem;margin-bottom:1rem}
+.profile-preview img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--purple)}
+.contact-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:3rem}
+.contact-info-card{padding:2rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
+.contact-item{display:flex;align-items:center;gap:1rem;padding:1rem 0;border-bottom:1px solid var(--border)}
+.contact-item:last-child{border-bottom:none}
+.contact-item .icon{width:44px;height:44px;border-radius:12px;background:var(--grad);display:grid;place-items:center;font-size:1.1rem;flex-shrink:0}
+.contact-item a{font-weight:500;word-break:break-all}
+.contact-form{padding:2rem;border-radius:var(--radius);background:var(--surface);border:1px solid var(--border)}
+footer{padding:3rem 0 1.5rem;border-top:1px solid var(--border);background:var(--bg-2);margin-top:2rem}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;margin-bottom:2rem}
+.footer-brand .logo{margin-bottom:.8rem}
+.footer-brand p{font-size:.85rem;color:var(--muted);max-width:300px}
+.footer-col h4{font-size:.9rem;margin-bottom:1rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:.5rem}
+.footer-col a{font-size:.85rem;color:var(--muted)}
+.footer-bottom{text-align:center;padding-top:1.5rem;border-top:1px solid var(--border);font-size:.8rem;color:var(--muted)}
+#whatsapp-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:800;width:60px;height:60px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 8px 30px rgba(37,211,102,.4);transition:var(--transition);animation:wa-pulse 2.5s infinite}
+#whatsapp-float:hover{transform:scale(1.1)}
+#whatsapp-float svg{width:30px;height:30px;fill:#fff}
+@keyframes wa-pulse{0%,100%{box-shadow:0 0 0 0 rgba(37,211,102,.4)}50%{box-shadow:0 0 0 18px rgba(37,211,102,0)}}
+#back-to-top{position:fixed;bottom:1.8rem;left:1.8rem;z-index:800;width:48px;height:48px;border-radius:50%;background:var(--surface);border:1px solid var(--border);display:grid;place-items:center;opacity:0;visibility:hidden;transition:var(--transition);backdrop-filter:blur(12px)}
+#back-to-top.visible{opacity:1;visibility:visible}
+#back-to-top:hover{border-color:var(--cyan);transform:translateY(-3px)}
+#toast-container{position:fixed;top:1.5rem;right:1.5rem;z-index:10000;display:flex;flex-direction:column;gap:.6rem;max-width:360px}
+.toast{padding:.9rem 1.2rem;border-radius:12px;font-size:.85rem;font-weight:500;background:var(--bg-2);border:1px solid var(--border);box-shadow:0 10px 40px rgba(0,0,0,.5);animation:toast-in .3s ease;display:flex;align-items:center;gap:.6rem}
+.toast.success{border-left:3px solid #22c55e}
+.toast.error{border-left:3px solid #ef4444}
+.toast.info{border-left:3px solid var(--cyan)}
+@keyframes toast-in{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.modal-overlay{position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:1rem;overflow-y:auto}
+.modal-overlay.open{display:flex}
+.modal{width:min(560px,100%);padding:2rem;border-radius:var(--radius);background:var(--bg-2);border:1px solid var(--border);box-shadow:0 30px 80px rgba(0,0,0,.6);animation:modal-in .3s ease;margin:auto}
+@keyframes modal-in{from{opacity:0;transform:scale(.95) translateY(20px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal h3{margin-bottom:1rem;font-size:1.2rem}
+.modal p{color:var(--muted);font-size:.9rem;margin-bottom:1.5rem}
+.modal-actions{display:flex;gap:.8rem;justify-content:flex-end;margin-top:1rem}
+#storage-status{position:fixed;bottom:6rem;left:1.8rem;z-index:799;padding:.4rem .9rem;border-radius:50px;font-size:.72rem;font-weight:600;display:flex;align-items:center;gap:.4rem;background:var(--surface);border:1px solid var(--border);backdrop-filter:blur(12px)}
+#storage-status .dot{width:7px;height:7px;border-radius:50%}
+#storage-status.ready .dot{background:#22c55e;box-shadow:0 0 8px #22c55e}
+#storage-status.error .dot{background:#ef4444;box-shadow:0 0 8px #ef4444}
+#auth-bar{position:fixed;top:0;left:0;right:0;z-index:1100;padding:.5rem 1rem;font-size:.78rem;display:none;align-items:center;justify-content:center;gap:1rem;background:linear-gradient(90deg,rgba(139,92,246,.2),rgba(6,182,212,.2));border-bottom:1px solid var(--border);backdrop-filter:blur(20px)}
+#auth-bar.visible{display:flex}
+@media(max-width:900px){
+.hero-grid,.about-grid,.contact-grid{grid-template-columns:1fr;gap:2.5rem}
+.hero-visual{order:-1}.avatar-wrap{width:220px;height:220px}
+.footer-grid{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}
+.nav-links{position:fixed;inset:0;flex-direction:column;justify-content:center;gap:.5rem;background:rgba(5,5,8,.97);backdrop-filter:blur(30px);opacity:0;visibility:hidden;transition:var(--transition);padding:2rem}
+.nav-links.open{opacity:1;visibility:visible}
+.nav-links > li > a,.nav-links > li > button{font-size:1.1rem;padding:.8rem 1.5rem;width:100%;justify-content:center}
+.dropdown-menu{position:static;opacity:1;visibility:visible;transform:none;background:transparent;border:none;box-shadow:none;display:none}
+.dropdown.open .dropdown-menu{display:block}.hamburger{display:flex}
+.counters{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:600px){
+section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
+.notes-toolbar{flex-direction:column;align-items:stretch}
+.modal-actions{flex-direction:column}.modal-actions .btn{width:100%;justify-content:center}
+.admin-tabs{flex-wrap:nowrap;overflow-x:auto}
+}
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen relative overflow-x-hidden selection:bg-brand-500 selection:text-white">
+<body>
 
-    <div class="fixed top-0 left-1/4 w-96 h-96 bg-brand-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
-    <div class="fixed bottom-10 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: 1.5s;"></div>
-    <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-cyan-600/10 rounded-full blur-[120px] pointer-events-none"></div>
+<div id="loader"><div class="spinner"></div><p style="color:var(--muted);font-size:.9rem">Loading portal…</p></div>
+<div id="scroll-progress"></div>
 
-    <nav class="sticky top-0 z-40 glass-panel border-b border-slate-800/80">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top:0, behavior:'smooth'})">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-brand-600 to-cyan-400 flex items-center justify-center shadow-lg shadow-brand-500/30">
-                        <i class="fa-solid fa-laptop-code text-2xl text-white"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">CS Hub</span>
-                        <span class="block text-xs text-brand-500 font-medium tracking-wider">NOTES PORTAL</span>
-                    </div>
-                </div>
+<div id="auth-bar">
+  <span id="auth-status-text">Admin mode active</span>
+  <button class="btn btn-sm btn-outline" id="logout-btn">Logout</button>
+</div>
 
-                <div class="flex items-center space-x-4">
-                    <button id="openUploadBtn" onclick="toggleModal(true)" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-semibold shadow-lg shadow-brand-600/25 hover:shadow-brand-600/40 transition duration-300 flex items-center space-x-2 border border-white/10 active:scale-95">
-                        <i class="fa-solid fa-cloud-arrow-up"></i>
-                        <span>Upload Notes</span>
-                    </button>
-                </div>
-            </div>
-        </div>
+<header id="main-header">
+  <div class="container header-inner">
+    <a href="#home" class="logo"><span class="logo-mark">MS</span><span id="logo-text">Muhammad Shahbaz</span></a>
+    <nav>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About Me</a></li>
+        <li><a href="#institutions">Institutions</a></li>
+        <li><a href="#contact">Contact Me</a></li>
+        <li class="dropdown" id="notes-dropdown">
+          <button aria-haspopup="true">Notes <span aria-hidden="true">▾</span></button>
+          <div class="dropdown-menu">
+            <a href="#notes" data-class="Class 9th">Class 9th</a>
+            <a href="#notes" data-class="Class 10th">Class 10th</a>
+            <a href="#notes" data-class="ICS 1st Year">ICS 1st Year</a>
+            <a href="#notes" data-class="ICS 2nd Year">ICS 2nd Year</a>
+            <a href="#notes" data-class="BS IT">BS IT</a>
+            <a href="#notes" data-class="Other Classes">Other Classes</a>
+          </div>
+        </li>
+        <li><button id="admin-login-trigger" class="btn btn-sm btn-outline">Admin Login</button></li>
+      </ul>
     </nav>
+    <div class="header-actions">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
 
-    <section class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center">
-        <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full glass-panel text-brand-400 text-sm font-medium mb-6 border border-brand-500/20">
-            <span class="w-2 h-2 rounded-full bg-brand-400 animate-ping"></span>
-            <span>Computer Science Study Material</span>
+<section id="home">
+  <div class="hero-particles" id="hero-particles"></div>
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content reveal">
+        <h1 id="hero-title">Welcome to <span class="gradient-text">Muhammad Shahbaz's</span> Computer Science Notes Portal</h1>
+        <p class="lead" id="hero-subtitle">Learn Computer Science with Clear Concepts, Quality Notes, and Modern Technology.</p>
+        <div class="hero-buttons">
+          <a href="#notes" class="btn btn-primary">Explore Notes →</a>
+          <a href="#contact" class="btn btn-outline">Contact Me</a>
         </div>
-        
-        <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-100 to-slate-400">
-            High Quality Computer Notes <br class="hidden sm:inline"/>
-            <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-400 via-purple-400 to-cyan-400 animate-gradient-x">For 9th, 10th & ICS Classes</span>
-        </h1>
-        
-        <p class="max-w-2xl mx-auto text-base sm:text-lg text-slate-400 leading-relaxed">
-            Access chapter-wise computer science notes, past papers, short questions, and lab manuals designed specifically for matriculation and intermediate board exams.
-        </p>
-
-        <div class="mt-10 max-w-3xl mx-auto space-y-6">
-            <div class="relative">
-                <i class="fa-solid fa-magnifying-glass absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
-                <input type="text" id="searchInput" placeholder="Search by topic, chapter, or title..." 
-                       class="w-full pl-13 pr-4 py-4 rounded-2xl glass-panel text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/50 border border-slate-700/60 shadow-xl transition">
-            </div>
-
-            <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3" id="classTabs">
-                <button data-class="All" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-brand-600 text-white shadow-lg shadow-brand-600/30">
-                    All Classes
-                </button>
-                <button data-class="9th Class" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800">
-                    9th Class
-                </button>
-                <button data-class="10th Class" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800">
-                    10th Class
-                </button>
-                <button data-class="1st Year (ICS)" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800">
-                    1st Year (ICS)
-                </button>
-                <button data-class="2nd Year (ICS)" class="tab-btn px-5 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 bg-slate-900/80 text-slate-300 hover:bg-slate-800 border border-slate-800">
-                    2nd Year (ICS)
-                </button>
-            </div>
+      </div>
+      <div class="hero-visual reveal">
+        <div class="avatar-wrap">
+          <div class="avatar-ring"></div>
+          <div class="avatar-inner"><img id="profile-img" src="" alt="Profile" loading="lazy"></div>
         </div>
-    </section>
+        <div class="hero-name gradient-text" id="hero-name">Muhammad Shahbaz</div>
+        <div class="typewriter" id="typewriter"></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-24">
-        <div class="flex justify-between items-center mb-8 border-b border-slate-800/80 pb-4">
-            <h2 class="text-xl font-bold text-slate-200 flex items-center gap-2">
-                <i class="fa-solid fa-folder-open text-brand-500"></i>
-                <span>Available Resources</span>
-                <span id="notesCount" class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-slate-800 text-brand-400 border border-slate-700">0</span>
-            </h2>
-            <div id="activeFilterBadge" class="text-xs text-slate-400 italic">Showing: All Classes</div>
+<section id="about">
+  <div class="container">
+    <div class="section-header reveal"><h2>About <span class="gradient-text">Muhammad Shahbaz</span></h2></div>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p id="about-text-1">I am Muhammad Shahbaz, a passionate Computer Science Educator, Website Designer, and AI Expert. I am dedicated to helping students understand Computer Science through simple explanations, practical learning, and well-organized educational resources.</p>
+        <p id="about-text-2">My goal is to make quality educational content accessible to students and support them in their academic journey.</p>
+        <div class="info-cards">
+          <div class="info-card"><strong>CS Educator</strong><span>Clear concept-based teaching</span></div>
+          <div class="info-card"><strong>Website Designer</strong><span>Modern responsive web experiences</span></div>
+          <div class="info-card"><strong>AI Expert</strong><span>Practical AI integration</span></div>
+          <div class="info-card"><strong>BS IT HoD</strong><span>Academic leadership</span></div>
+          <div class="info-card"><strong>EdTech Specialist</strong><span>Technology for learning</span></div>
         </div>
+      </div>
+      <div class="counters reveal">
+        <div class="counter-card"><div class="counter-num" data-target="6">0</div><div class="counter-label">Classes Covered</div></div>
+        <div class="counter-card"><div class="counter-num" data-target="6">0</div><div class="counter-label">Institutions</div></div>
+        <div class="counter-card"><div class="counter-num" id="notes-count">0</div><div class="counter-label">Available Notes</div></div>
+        <div class="counter-card"><div class="counter-num" data-target="500">0</div><div class="counter-label">Students Reached*</div></div>
+      </div>
+    </div>
+    <p style="font-size:.75rem;color:var(--muted);margin-top:1rem;text-align:center">*Approximate reach based on classroom and institutional engagements.</p>
+  </div>
+</section>
 
-        <div id="notesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+<section id="institutions">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>My <span class="gradient-text">Professional Experience</span></h2>
+      <p>Institutions where I have contributed to Computer Science education and academic leadership.</p>
+    </div>
+    <div class="inst-grid" id="institutions-grid"></div>
+  </div>
+</section>
 
-        <div id="emptyState" class="hidden text-center py-16 glass-panel rounded-3xl border border-slate-800 my-8">
-            <div class="w-20 h-20 mx-auto rounded-full bg-slate-800/80 flex items-center justify-center text-slate-500 text-3xl mb-4">
-                <i class="fa-solid fa-file-circle-xmark"></i>
-            </div>
-            <h3 class="text-lg font-semibold text-slate-300 mb-1">No Notes Found</h3>
-            <p class="text-slate-500 text-sm max-w-sm mx-auto mb-6">There are no notes available for the selected category or search keyword.</p>
-            <button onclick="resetFilters()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium rounded-xl transition">
-                Reset Filters
-            </button>
+<section id="admin-staff">
+  <div class="container">
+    <div class="section-header reveal"><h2>Administrative <span class="gradient-text">Staff</span></h2></div>
+    <div class="reveal">
+      <div class="accordion-item">
+        <button class="accordion-header" aria-expanded="false"><span>Administrative Responsibilities Overview</span><span class="accordion-arrow">▾</span></button>
+        <div class="accordion-body">
+          <div class="accordion-body-inner">
+            <p style="margin-bottom:.8rem">The administrative framework supports academic excellence, operational efficiency, and student success through structured coordination.</p>
+            <ul style="margin-left:1.2rem;display:flex;flex-direction:column;gap:.5rem">
+              <li><strong>Administrative Management:</strong> Overseeing daily academic and operational workflows.</li>
+              <li><strong>Academic Coordination:</strong> Aligning curriculum delivery across classes and programs.</li>
+              <li><strong>School Operations:</strong> Ensuring smooth institutional functioning and resource availability.</li>
+              <li><strong>Educational Planning:</strong> Strategic planning for academic calendars and assessments.</li>
+              <li><strong>Staff Coordination:</strong> Facilitating communication and collaboration among teaching faculty.</li>
+            </ul>
+          </div>
         </div>
-    </main>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <div id="uploadModal" class="fixed inset-0 z-50 flex items-center justify-center px-4 bg-slate-950/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="glass-panel w-full max-w-2xl rounded-3xl border border-slate-700/60 p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-transform duration-300" id="modalContainer">
-            
-            <button onclick="toggleModal(false)" class="absolute top-5 right-5 text-slate-400 hover:text-white w-9 h-9 rounded-full bg-slate-800/60 flex items-center justify-center transition">
-                <i class="fa-solid fa-xmark text-lg"></i>
-            </button>
-
-            <div class="flex items-center space-x-3 mb-6">
-                <div class="w-10 h-10 rounded-xl bg-brand-600/20 text-brand-400 flex items-center justify-center border border-brand-500/30">
-                    <i class="fa-solid fa-file-arrow-up text-lg"></i>
-                </div>
-                <div>
-                    <h3 class="text-xl font-bold text-white">Upload CS Notes</h3>
-                    <p class="text-xs text-slate-400">Add computer science study materials for students</p>
-                </div>
-            </div>
-
-            <form id="uploadForm" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Title / Chapter Name</label>
-                    <input type="text" id="noteTitle" required placeholder="e.g. Chapter 1: Introduction to Data Structures" 
-                           class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-sm">
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Class</label>
-                        <select id="noteClass" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white focus:outline-none focus:border-brand-500 text-sm">
-                            <option value="9th Class">9th Class</option>
-                            <option value="10th Class">10th Class</option>
-                            <option value="1st Year (ICS)">1st Year (ICS)</option>
-                            <option value="2nd Year (ICS)">2nd Year (ICS)</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Subject Tag</label>
-                        <input type="text" id="noteSubject" placeholder="e.g. Computer Science, C++ Programming" required
-                               class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-sm">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Description (Optional)</label>
-                    <textarea id="noteDesc" rows="2" placeholder="Brief details about topics covered in these notes..." 
-                              class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-brand-500 text-sm"></textarea>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1">Document File (PDF / DOCX / Image)</label>
-                    <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-brand-500/50 rounded-2xl p-6 text-center bg-slate-900/40 hover:bg-slate-900/80 transition cursor-pointer relative">
-                        <input type="file" id="noteFile" required accept=".pdf,.doc,.docx,.jpg,.png,.zip" class="absolute inset-0 opacity-0 cursor-pointer">
-                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-brand-400 mb-2"></i>
-                        <p class="text-xs text-slate-300 font-medium" id="fileNameDisplay">Click or drag file here to upload</p>
-                        <p class="text-[10px] text-slate-500 mt-1">PDF, DOCX, PNG, JPG up to 25MB</p>
-                    </div>
-                </div>
-
-                <div class="pt-2">
-                    <button type="submit" id="submitBtn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-600 to-purple-600 hover:from-brand-500 hover:to-purple-500 text-white font-bold shadow-lg shadow-brand-600/30 transition flex items-center justify-center space-x-2">
-                        <i class="fa-solid fa-paper-plane"></i>
-                        <span id="btnText">Publish Note</span>
-                    </button>
-                </div>
-            </form>
-        </div>
+<section id="notes">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Computer Science <span class="gradient-text">Notes</span></h2>
+      <p>Browse, search, and download notes uploaded by Muhammad Shahbaz.</p>
+    </div>
+    <div class="notes-toolbar reveal">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input type="search" id="notes-search" placeholder="Search notes…" aria-label="Search notes">
+      </div>
+      <div class="filter-selects">
+        <select id="filter-subject" aria-label="Filter by subject"><option value="">All Subjects</option></select>
+        <select id="filter-chapter" aria-label="Filter by chapter"><option value="">All Chapters</option></select>
+      </div>
+    </div>
+    <div class="class-tabs reveal" id="class-tabs">
+      <button class="class-tab active" data-class="">All Classes</button>
+      <button class="class-tab" data-class="Class 9th">Class 9th</button>
+      <button class="class-tab" data-class="Class 10th">Class 10th</button>
+      <button class="class-tab" data-class="ICS 1st Year">ICS 1st Year</button>
+      <button class="class-tab" data-class="ICS 2nd Year">ICS 2nd Year</button>
+      <button class="class-tab" data-class="BS IT">BS IT</button>
+      <button class="class-tab" data-class="Other Classes">Other Classes</button>
+    </div>
+    <div id="notes-loading" class="notes-grid" style="display:none">
+      <div class="loading-skeleton"></div><div class="loading-skeleton"></div><div class="loading-skeleton"></div>
+    </div>
+    <div id="notes-grid" class="notes-grid"></div>
+    <div id="notes-empty" class="empty-state" style="display:none">
+      <div class="icon">📭</div><h3>No notes yet</h3>
+      <p>Only the admin can upload notes. Check back later.</p>
     </div>
 
-    <div id="toast" class="fixed bottom-6 right-6 z-50 flex items-center space-x-3 px-5 py-3.5 rounded-2xl glass-panel text-sm text-white shadow-2xl border border-slate-700 transition duration-300 transform translate-y-24 opacity-0 pointer-events-none">
-        <i id="toastIcon" class="fa-solid fa-circle-check text-brand-400 text-lg"></i>
-        <span id="toastMsg">Operation successful!</span>
+    <!-- ADMIN PANEL -->
+    <div class="admin-panel" id="admin-panel">
+      <div class="admin-tabs">
+        <button class="admin-tab active" data-tab="notes">📝 Notes</button>
+        <button class="admin-tab" data-tab="profile">👤 Profile</button>
+        <button class="admin-tab" data-tab="content">📄 Content</button>
+        <button class="admin-tab" data-tab="contact">📞 Contact</button>
+        <button class="admin-tab" data-tab="institutions">🏫 Institutions</button>
+        <button class="admin-tab" data-tab="security">🔒 Security</button>
+      </div>
+
+      <!-- TAB: NOTES -->
+      <div class="admin-tab-content active" id="tab-notes">
+        <div class="admin-notice">⚠️ <strong>Local Storage Mode:</strong> Notes are saved in <em>this browser only</em>. To share, upload files to a hosting service and provide direct links.</div>
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.2rem">
+          <h3 style="font-size:1.1rem">Upload New Note</h3>
+          <button class="btn btn-sm btn-outline" id="refresh-admin-notes">Refresh Notes</button>
+        </div>
+        <form class="admin-form" id="upload-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="up-class">Class *</label>
+              <select id="up-class" required>
+                <option value="">Select</option>
+                <option>Class 9th</option><option>Class 10th</option>
+                <option>ICS 1st Year</option><option>ICS 2nd Year</option>
+                <option>BS IT</option><option>Other Classes</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="up-subject">Subject *</label>
+              <select id="up-subject" required>
+                <option value="">Select</option>
+                <option>Computer Science</option><option>Information Technology</option>
+                <option>Programming</option><option>Mathematics</option>
+                <option>English</option><option>Physics</option>
+              </select>
+            </div>
+            <div class="form-group"><label for="up-title">Title *</label><input type="text" id="up-title" required maxlength="150"></div>
+            <div class="form-group"><label for="up-chapter">Chapter</label><input type="text" id="up-chapter" maxlength="100"></div>
+            <div class="form-group full"><label for="up-desc">Description</label><textarea id="up-desc" rows="2" maxlength="500"></textarea></div>
+            <div class="form-group full">
+              <label>File * (PDF, DOC, DOCX, PPT, PPTX, TXT, JPG, PNG — max 50 MB)</label>
+              <div class="file-drop" id="file-drop">
+                <input type="file" id="up-file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png">
+                <p id="file-drop-text">Click or drag file</p>
+              </div>
+            </div>
+          </div>
+          <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-progress-bar"></div></div>
+          <div style="display:flex;gap:.8rem;margin-top:1rem;flex-wrap:wrap">
+            <button type="submit" class="btn btn-primary">Upload Note</button>
+            <button type="button" class="btn btn-outline" id="upload-cancel">Reset</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- TAB: PROFILE -->
+      <div class="admin-tab-content" id="tab-profile">
+        <h3 style="margin-bottom:1.2rem">Profile & Hero</h3>
+        <div class="profile-preview">
+          <img id="profile-preview-img" src="" alt="Preview">
+          <div>
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem">Current profile picture</p>
+            <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+              <label class="btn btn-sm btn-primary" style="cursor:pointer">
+                📷 Change Photo
+                <input type="file" id="profile-file-input" accept="image/*" style="display:none">
+              </label>
+              <button class="btn btn-sm btn-outline" id="profile-remove-btn">Remove Photo</button>
+            </div>
+          </div>
+        </div>
+        <form id="profile-form">
+          <div class="form-group"><label>Display Name</label><input type="text" id="profile-name-input" maxlength="60"></div>
+          <div class="form-group"><label>Typewriter Titles (comma-separated)</label><input type="text" id="profile-titles-input" placeholder="Website Designer,Teacher,AI Expert"></div>
+          <button type="submit" class="btn btn-primary">Save Profile</button>
+        </form>
+      </div>
+
+      <!-- TAB: CONTENT -->
+      <div class="admin-tab-content" id="tab-content">
+        <h3 style="margin-bottom:1.2rem">Hero & About Content</h3>
+        <form id="content-form">
+          <div class="form-group">
+            <label>Hero Title (HTML allowed)</label>
+            <textarea id="content-hero-title" rows="2" placeholder='Welcome to <span class="gradient-text">Muhammad Shahbaz\'s</span> Computer Science Notes Portal'></textarea>
+            <small>Tip: Use <code>&lt;span class="gradient-text"&gt;text&lt;/span&gt;</code> for gradient highlight.</small>
+          </div>
+          <div class="form-group"><label>Hero Subtitle</label><textarea id="content-hero-subtitle" rows="2"></textarea></div>
+          <div class="form-group"><label>About Paragraph 1</label><textarea id="content-about-1" rows="3"></textarea></div>
+          <div class="form-group"><label>About Paragraph 2</label><textarea id="content-about-2" rows="2"></textarea></div>
+          <button type="submit" class="btn btn-primary">Save Content</button>
+        </form>
+      </div>
+
+      <!-- TAB: CONTACT -->
+      <div class="admin-tab-content" id="tab-contact">
+        <h3 style="margin-bottom:1.2rem">Contact Information</h3>
+        <form id="contact-form-admin">
+          <div class="form-grid">
+            <div class="form-group"><label>Email</label><input type="email" id="contact-email-input"></div>
+            <div class="form-group"><label>Phone (display)</label><input type="text" id="contact-phone-input"></div>
+            <div class="form-group"><label>WhatsApp Number (digits only, e.g., 923176092143)</label><input type="text" id="contact-wa-input"></div>
+            <div class="form-group"><label>Location</label><input type="text" id="contact-location-input"></div>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Contact Info</button>
+        </form>
+      </div>
+
+      <!-- TAB: INSTITUTIONS -->
+      <div class="admin-tab-content" id="tab-institutions">
+        <h3 style="margin-bottom:1.2rem">Institutions (JSON)</h3>
+        <div class="admin-notice">Each institution: <code>{"name":"...","role":"...","desc":"...","icon":"🎓"}</code></div>
+        <div class="form-group">
+          <label>Institutions JSON</label>
+          <textarea id="institutions-json" rows="14" style="font-family:monospace;font-size:.8rem"></textarea>
+        </div>
+        <div style="display:flex;gap:.8rem;flex-wrap:wrap">
+          <button class="btn btn-primary" id="save-institutions-btn">Save Institutions</button>
+          <button class="btn btn-outline" id="reset-institutions-btn">Reset to Defaults</button>
+        </div>
+      </div>
+
+      <!-- TAB: SECURITY -->
+      <div class="admin-tab-content" id="tab-security">
+        <h3 style="margin-bottom:1.2rem">Change Admin Password</h3>
+        <form id="password-form" style="max-width:400px">
+          <div class="form-group"><label>Current Password</label><input type="password" id="pwd-current" required></div>
+          <div class="form-group"><label>New Password (min 6 chars)</label><input type="password" id="pwd-new" required minlength="6"></div>
+          <div class="form-group"><label>Confirm New Password</label><input type="password" id="pwd-confirm" required minlength="6"></div>
+          <button type="submit" class="btn btn-primary">Update Password</button>
+        </form>
+        <div class="admin-notice" style="margin-top:1.5rem">Default password: <code>11223344</code> — change it now for security.</div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <script>
-        const SUPABASE_URL = 'https://zzplwfoggyofbxzwqyqv.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp6cGx3Zm9nZ3lvZmJ4endxeXF2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1NDgwMTYsImV4cCI6MjEwOTEyNDAxNn0.gWnoN0HyUpioPhCEe7RLSkDpfz7pxm9fzaBbm9EaxLM';
+<section id="contact">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2>Contact <span class="gradient-text">Muhammad Shahbaz</span></h2>
+      <p>Reach out directly via email or WhatsApp, or send a student message through the form.</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info-card reveal">
+        <div class="contact-item">
+          <div class="icon">📧</div>
+          <div><div style="font-size:.78rem;color:var(--muted)">Email</div><a id="contact-email" href="mailto:muhammadshahbaz2762@gmail.com">muhammadshahbaz2762@gmail.com</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">📱</div>
+          <div><div style="font-size:.78rem;color:var(--muted)">WhatsApp</div><a id="contact-phone" href="https://wa.me/923176092143" target="_blank" rel="noopener">+92 317 6092143</a></div>
+        </div>
+        <div class="contact-item">
+          <div class="icon">📍</div>
+          <div><div style="font-size:.78rem;color:var(--muted)">Location</div><span style="font-weight:500" id="contact-location">Muzaffargarh, Punjab, Pakistan</span></div>
+        </div>
+      </div>
+      <form class="contact-form reveal" id="student-contact-form">
+        <div class="form-grid">
+          <div class="form-group"><label for="cf-name">Student Name *</label><input type="text" id="cf-name" required maxlength="80"></div>
+          <div class="form-group"><label for="cf-email">Email *</label><input type="email" id="cf-email" required maxlength="120"></div>
+          <div class="form-group"><label for="cf-class">Class *</label>
+            <select id="cf-class" required>
+              <option value="">Select</option>
+              <option>Class 9th</option><option>Class 10th</option>
+              <option>ICS 1st Year</option><option>ICS 2nd Year</option>
+              <option>BS IT</option><option>Other</option>
+            </select>
+          </div>
+          <div class="form-group"><label for="cf-school">School / College *</label><input type="text" id="cf-school" required maxlength="120"></div>
+          <div class="form-group full"><label for="cf-subject">Subject *</label><input type="text" id="cf-subject" required maxlength="120"></div>
+          <div class="form-group full"><label for="cf-message">Message *</label><textarea id="cf-message" rows="4" required maxlength="1000"></textarea></div>
+        </div>
+        <button type="submit" class="btn btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center">Send Message on WhatsApp →</button>
+      </form>
+    </div>
+  </div>
+</section>
 
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><span class="logo-mark">MS</span><span id="footer-logo-text">Muhammad Shahbaz</span></div>
+        <p>Computer Science Educator | Website Designer | AI Expert. Dedicated to accessible, high-quality educational resources.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul><li><a href="#home">Home</a></li><li><a href="#about">About Me</a></li><li><a href="#notes">Notes</a></li><li><a href="#contact">Contact Me</a></li></ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a id="footer-email" href="mailto:muhammadshahbaz2762@gmail.com">muhammadshahbaz2762@gmail.com</a></li>
+          <li><a id="footer-phone" href="https://wa.me/923176092143" target="_blank" rel="noopener">+92 317 6092143</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Muhammad Shahbaz. All Rights Reserved.</p>
+      <p style="margin-top:.4rem">Designed and Developed with Passion for Education and Technology.</p>
+    </div>
+  </div>
+</footer>
 
-        let allNotes = [];
-        let activeClassFilter = 'All';
-        let searchQuery = '';
+<a id="whatsapp-float" href="https://wa.me/923176092143" target="_blank" rel="noopener" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
 
-        window.onload = function() {
-            loadLocalNotes();
-            fetchNotes();
-            setupEventListeners();
-        };
+<button id="back-to-top" aria-label="Back to top">↑</button>
+<div id="storage-status"><span class="dot"></span><span id="storage-text">Checking…</span></div>
+<div id="toast-container"></div>
 
-        function setupEventListeners() {
-            document.getElementById('searchInput').addEventListener('input', (e) => {
-                searchQuery = e.target.value.toLowerCase().trim();
-                renderNotes();
-            });
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="login-modal">
+  <div class="modal">
+    <h3>Admin Login</h3>
+    <p>Enter the admin password to access the dashboard.</p>
+    <form id="login-form">
+      <div class="form-group"><label for="login-password">Password</label><input type="password" id="login-password" required autocomplete="current-password" placeholder="Enter password"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="login-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Sign In</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-            document.querySelectorAll('#classTabs .tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('#classTabs .tab-btn').forEach(b => {
-                        b.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/30');
-                        b.classList.add('bg-slate-900/80', 'text-slate-300', 'border', 'border-slate-800');
-                    });
-                    btn.classList.remove('bg-slate-900/80', 'text-slate-300', 'border', 'border-slate-800');
-                    btn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/30');
+<!-- DELETE CONFIRM MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <h3>Confirm Delete</h3>
+    <p>Are you sure you want to delete this note? This action cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="btn btn-outline" id="delete-cancel">Cancel</button>
+      <button class="btn btn-danger" id="delete-confirm">Confirm Delete</button>
+    </div>
+  </div>
+</div>
 
-                    activeClassFilter = btn.getAttribute('data-class');
-                    document.getElementById('activeFilterBadge').innerText = `Showing: ${activeClassFilter}`;
-                    renderNotes();
-                });
-            });
+<!-- EDIT NOTE MODAL -->
+<div class="modal-overlay" id="edit-note-modal">
+  <div class="modal">
+    <h3>Edit Note</h3>
+    <form id="edit-note-form">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Class *</label>
+          <select id="edit-class" required>
+            <option value="">Select</option>
+            <option>Class 9th</option><option>Class 10th</option>
+            <option>ICS 1st Year</option><option>ICS 2nd Year</option>
+            <option>BS IT</option><option>Other Classes</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Subject *</label>
+          <select id="edit-subject" required>
+            <option value="">Select</option>
+            <option>Computer Science</option><option>Information Technology</option>
+            <option>Programming</option><option>Mathematics</option>
+            <option>English</option><option>Physics</option>
+          </select>
+        </div>
+        <div class="form-group full"><label>Title *</label><input type="text" id="edit-title" required maxlength="150"></div>
+        <div class="form-group full"><label>Chapter</label><input type="text" id="edit-chapter" maxlength="100"></div>
+        <div class="form-group full"><label>Description</label><textarea id="edit-desc" rows="2" maxlength="500"></textarea></div>
+        <div class="form-group full">
+          <label>Replace File (optional)</label>
+          <input type="file" id="edit-file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png" style="padding:.6rem;background:var(--bg);border:1px solid var(--border);border-radius:10px;width:100%">
+          <small>Leave empty to keep the existing file.</small>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-outline" id="edit-cancel">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+      </div>
+    </form>
+  </div>
+</div>
 
-            document.getElementById('noteFile').addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    document.getElementById('fileNameDisplay').innerText = `Selected: ${file.name} (${(file.size / (1024*1024)).toFixed(2)} MB)`;
-                }
-            });
+<script>
+/* ============================================================
+   1. CONFIG
+   ============================================================ */
+const AUTH_KEY = 'ms-admin-auth';
+const PWD_HASH_KEY = 'ms-admin-password';
+const SETTINGS_KEY = 'ms-site-settings';
+const THEME_KEY = 'ms-theme';
+const DB_NAME = 'ms-notes-db';
+const DB_VERSION = 1;
+const STORE_FILES = 'files';
+const STORE_META = 'metadata';
+const MAX_SIZE = 50 * 1024 * 1024;
+const ALLOWED_EXT = ['pdf','doc','docx','ppt','pptx','txt','jpg','jpeg','png'];
+const ALLOWED_MIME = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.ms-powerpoint','application/vnd.openxmlformats-officedocument.presentationml.presentation','text/plain','image/jpeg','image/png'];
+const PROFILE_KEY = '__profile__';
+const DEFAULT_PWD_HASH = btoa('11223344');
 
-            document.getElementById('uploadForm').addEventListener('submit', handleNoteUpload);
-        }
+const DEFAULT_INSTITUTIONS = [
+  { name: 'Legend College Muzaffargarh', role: 'Head of Department — BS IT', desc: "I am serving as the Head of Department of BS Information Technology at Legend College Muzaffargarh, where I contribute to academic leadership, educational planning, and the development of students' technical skills.", icon: '🎓' },
+  { name: 'Inspire School System', role: 'Computer Teacher', desc: 'I work as a Computer Teacher at Inspire School System, helping students develop computer literacy and understand essential computing concepts.', icon: '💻' },
+  { name: 'Nawaz Sharif School of Eminence Girls Campus Muzaffargarh', role: 'Computer Teacher', desc: 'I serve as a Computer Teacher at Nawaz Sharif School of Eminence Girls Campus Muzaffargarh, providing students with computer education and practical learning opportunities.', icon: '🏫' },
+  { name: 'New Hope Science Academy Muzaffargarh', role: 'Computer Teacher', desc: "I contribute to students' academic development by teaching computer-related subjects and supporting their understanding of technology.", icon: '🔬' },
+  { name: 'City Academy Muzaffargarh', role: 'Computer Teacher', desc: 'I help students strengthen their computer science knowledge through clear explanations and student-focused teaching.', icon: '🏙️' },
+  { name: 'Jevan Academy Muzaffargarh', role: 'Computer Teacher', desc: 'I support students in learning Computer Science through structured lessons, practical concepts, and accessible educational resources.', icon: '📚' }
+];
 
-        function loadLocalNotes() {
-            const stored = localStorage.getItem('cs_notes_local');
-            if (stored) {
-                try {
-                    allNotes = JSON.parse(stored);
-                } catch(e) {
-                    allNotes = [];
-                }
-            }
-        }
+const DEFAULT_SETTINGS = {
+  profileName: 'Muhammad Shahbaz',
+  heroTitleHtml: 'Welcome to <span class="gradient-text">Muhammad Shahbaz\'s</span> Computer Science Notes Portal',
+  heroSubtitle: 'Learn Computer Science with Clear Concepts, Quality Notes, and Modern Technology.',
+  aboutText1: 'I am Muhammad Shahbaz, a passionate Computer Science Educator, Website Designer, and AI Expert. I am dedicated to helping students understand Computer Science through simple explanations, practical learning, and well-organized educational resources.',
+  aboutText2: 'My goal is to make quality educational content accessible to students and support them in their academic journey.',
+  typewriterTitles: 'Website Designer,Teacher,AI Expert,Computer Science Educator',
+  email: 'muhammadshahbaz2762@gmail.com',
+  phone: '+92 317 6092143',
+  whatsapp: '923176092143',
+  location: 'Muzaffargarh, Punjab, Pakistan',
+  institutions: DEFAULT_INSTITUTIONS
+};
 
-        function saveLocalNotes() {
-            localStorage.setItem('cs_notes_local', JSON.stringify(allNotes));
-        }
+/* ============================================================
+   2. STATE
+   ============================================================ */
+let allNotes = [];
+let currentClass = '';
+let currentSearch = '';
+let currentSubject = '';
+let currentChapter = '';
+let isAdmin = false;
+let deleteTargetId = null;
+let selectedFile = null;
+let currentEditId = null;
+let profileUrl = null;
+let typewriterTimer = null;
+let twIdx = 0, twChar = 0, twDeleting = false;
 
-        async function fetchNotes() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('cs_notes')
-                    .select('*')
-                    .order('created_at', { ascending: false });
+/* ============================================================
+   3. HELPERS
+   ============================================================ */
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
 
-                if (!error && data && data.length > 0) {
-                    // Combine Supabase data with Local Storage uploaded notes
-                    const combined = [...data];
-                    allNotes.forEach(localNote => {
-                        if (!combined.some(dbNote => dbNote.id === localNote.id)) {
-                            combined.unshift(localNote);
-                        }
-                    });
-                    allNotes = combined;
-                    saveLocalNotes();
-                }
-            } catch (err) {
-                console.warn('Using Local Storage cache.');
-            }
-            renderNotes();
-        }
+function toast(msg, type = 'info') {
+  const el = document.createElement('div');
+  el.className = `toast ${type}`;
+  el.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span><span>${msg}</span>`;
+  $('#toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; setTimeout(() => el.remove(), 400); }, 4200);
+}
 
-        function renderNotes() {
-            const grid = document.getElementById('notesGrid');
-            const emptyState = document.getElementById('emptyState');
-            grid.innerHTML = '';
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
 
-            const filtered = allNotes.filter(note => {
-                const matchesClass = activeClassFilter === 'All' || note.class_name === activeClassFilter;
-                const matchesSearch = note.title.toLowerCase().includes(searchQuery) || 
-                                      note.subject.toLowerCase().includes(searchQuery) ||
-                                      (note.description && note.description.toLowerCase().includes(searchQuery));
-                return matchesClass && matchesSearch;
-            });
+function formatBytes(bytes) {
+  if (!bytes || bytes === 0) return '—';
+  const k = 1024, sizes = ['B','KB','MB','GB'];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+}
 
-            document.getElementById('notesCount').innerText = filtered.length;
+function formatDate(iso) {
+  if (!iso) return '—';
+  try { return new Date(iso).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }); }
+  catch { return '—'; }
+}
 
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-            } else {
-                emptyState.classList.add('hidden');
-                filtered.forEach(note => {
-                    grid.appendChild(createNoteCard(note));
-                });
-            }
-        }
+/* ============================================================
+   4. SETTINGS
+   ============================================================ */
+function getSettings() {
+  try {
+    const raw = localStorage.getItem(SETTINGS_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_SETTINGS, ...parsed };
+  } catch { return JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); }
+}
 
-        function createNoteCard(note) {
-            const card = document.createElement('div');
-            card.className = 'glass-card rounded-3xl p-6 flex flex-col justify-between relative group overflow-hidden';
-            
-            let badgeStyle = 'bg-brand-500/10 text-brand-400 border-brand-500/30';
-            if(note.class_name.includes('9th')) badgeStyle = 'bg-cyan-500/10 text-cyan-400 border-cyan-500/30';
-            if(note.class_name.includes('10th')) badgeStyle = 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30';
-            if(note.class_name.includes('1st')) badgeStyle = 'bg-purple-500/10 text-purple-400 border-purple-500/30';
-            if(note.class_name.includes('2nd')) badgeStyle = 'bg-amber-500/10 text-amber-400 border-amber-500/30';
+function saveSettings(settings) {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+}
 
-            const formattedDate = new Date(note.created_at).toLocaleDateString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric'
-            });
+/* ============================================================
+   5. INDEXEDDB
+   ============================================================ */
+function openDB() {
+  return new Promise((resolve, reject) => {
+    const req = indexedDB.open(DB_NAME, DB_VERSION);
+    req.onupgradeneeded = e => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains(STORE_FILES)) db.createObjectStore(STORE_FILES);
+      if (!db.objectStoreNames.contains(STORE_META)) {
+        const s = db.createObjectStore(STORE_META, { keyPath: 'id' });
+        s.createIndex('uploaded_at', 'uploaded_at');
+      }
+    };
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
+  });
+}
 
-            // Clean title for file name
-            const safeFileName = `${note.title.replace(/[^a-zA-Z0-0]/g, '_')}.${note.file_extension || 'pdf'}`;
+function withStore(store, mode, fn) {
+  return openDB().then(db => new Promise((resolve, reject) => {
+    const tx = db.transaction(store, mode);
+    const s = tx.objectStore(store);
+    let result;
+    try { result = fn(s); }
+    catch (err) { reject(err); return; }
+    tx.oncomplete = () => resolve(result && result._req ? result._req.result : result);
+    tx.onerror = () => reject(tx.error);
+    tx.onabort = () => reject(tx.error || new Error('Transaction aborted'));
+  }));
+}
 
-            card.innerHTML = `
-                <div>
-                    <div class="flex items-center justify-between gap-2 mb-4">
-                        <span class="px-3 py-1 text-xs font-bold rounded-full border ${badgeStyle}">
-                            ${note.class_name}
-                        </span>
-                        <span class="text-xs text-slate-400 flex items-center gap-1">
-                            <i class="fa-regular fa-clock"></i> ${formattedDate}
-                        </span>
-                    </div>
+const saveFileBlob = (id, blob) => withStore(STORE_FILES, 'readwrite', s => { s.put(blob, id); });
+const getFileBlob = id => withStore(STORE_FILES, 'readonly', s => { const r = s.get(id); return { _req: r }; });
+const deleteFileBlob = id => withStore(STORE_FILES, 'readwrite', s => { s.delete(id); });
 
-                    <h3 class="text-lg font-bold text-white group-hover:text-brand-400 transition-colors line-clamp-2 mb-2">
-                        ${note.title}
-                    </h3>
-                    <p class="text-xs font-semibold text-brand-400/80 mb-3 flex items-center gap-1.5">
-                        <i class="fa-solid fa-book-bookmark text-xs"></i> ${note.subject}
-                    </p>
+const getAllMeta = () => withStore(STORE_META, 'readonly', s => { const r = s.getAll(); return { _req: r }; });
+const saveMeta = meta => withStore(STORE_META, 'readwrite', s => { s.put(meta); });
+const deleteMeta = id => withStore(STORE_META, 'readwrite', s => { s.delete(id); });
+const getMeta = id => withStore(STORE_META, 'readonly', s => { const r = s.get(id); return { _req: r }; });
 
-                    <p class="text-xs text-slate-400 leading-relaxed line-clamp-3 mb-6">
-                        ${note.description || 'Comprehensive computer science notes covering important concepts and questions.'}
-                    </p>
-                </div>
+async function checkStorageStatus() {
+  try {
+    await openDB();
+    $('#storage-status').className = 'ready';
+    $('#storage-text').textContent = 'Storage ready';
+  } catch {
+    $('#storage-status').className = 'error';
+    $('#storage-text').textContent = 'Storage unavailable';
+  }
+}
 
-                <div class="pt-4 border-t border-slate-800/80 flex items-center justify-between">
-                    <span class="text-xs text-slate-500 font-medium">
-                        <i class="fa-solid fa-paperclip"></i> ${note.file_size || 'File'}
-                    </span>
-                    <a href="${note.file_url}" download="${safeFileName}"
-                       class="px-4 py-2 rounded-xl bg-brand-600/20 hover:bg-brand-600 text-brand-300 hover:text-white text-xs font-bold border border-brand-500/30 transition flex items-center gap-2 group-hover:shadow-lg group-hover:shadow-brand-600/30">
-                        <span>Download</span>
-                        <i class="fa-solid fa-download"></i>
-                    </a>
-                </div>
-            `;
-            return card;
-        }
+/* ============================================================
+   6. AUTH
+   ============================================================ */
+function getPasswordHash() { return localStorage.getItem(PWD_HASH_KEY) || DEFAULT_PWD_HASH; }
+function isAdminLoggedIn() { return localStorage.getItem(AUTH_KEY) === '1'; }
 
-        // Helper to read file as Data URL
-        function readFileAsDataURL(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = () => resolve(reader.result);
-                reader.onerror = error => reject(error);
-                reader.readAsDataURL(file);
-            });
-        }
+function login(password) {
+  if (btoa(password) === getPasswordHash()) {
+    localStorage.setItem(AUTH_KEY, '1');
+    return true;
+  }
+  return false;
+}
 
-        async function handleNoteUpload(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            
-            const title = document.getElementById('noteTitle').value.trim();
-            const className = document.getElementById('noteClass').value;
-            const subject = document.getElementById('noteSubject').value.trim();
-            const desc = document.getElementById('noteDesc').value.trim();
-            const fileInput = document.getElementById('noteFile');
-            const file = fileInput.files[0];
+function logout() { localStorage.removeItem(AUTH_KEY); }
 
-            if (!file) {
-                showToast('Please select a file to upload.', 'error');
-                return;
-            }
+function changePassword(current, next) {
+  if (btoa(current) !== getPasswordHash()) return 'Current password is incorrect.';
+  if (next.length < 6) return 'New password must be at least 6 characters.';
+  localStorage.setItem(PWD_HASH_KEY, btoa(next));
+  return null;
+}
 
-            submitBtn.disabled = true;
-            btnText.innerText = 'Uploading...';
+/* ============================================================
+   7. THEME
+   ============================================================ */
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'dark';
+  document.documentElement.dataset.theme = saved;
+  $('#theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️';
+}
 
-            try {
-                // Convert exact selected file to Base64 Data URL for instant downloadability
-                const base64File = await readFileAsDataURL(file);
-                const fileExt = file.name.split('.').pop() || 'pdf';
+/* ============================================================
+   8. APPLY SETTINGS TO PAGE
+   ============================================================ */
+function applySettings() {
+  const s = getSettings();
 
-                let publicUrl = base64File;
+  // Hero
+  $('#hero-name').textContent = s.profileName;
+  $('#hero-title').innerHTML = s.heroTitleHtml;
+  $('#hero-subtitle').textContent = s.heroSubtitle;
+  $('#logo-text').textContent = s.profileName;
+  $('#footer-logo-text').textContent = s.profileName;
 
-                // Try uploading to Supabase Storage Bucket if available
-                const filePath = `notes/${Date.now()}_${file.name}`;
-                const { data: storageData, error: storageError } = await supabaseClient
-                    .storage
-                    .from('notes')
-                    .upload(filePath, file);
+  // About
+  $('#about-text-1').textContent = s.aboutText1;
+  $('#about-text-2').textContent = s.aboutText2;
 
-                if (!storageError && storageData) {
-                    const { data: urlData } = supabaseClient.storage.from('notes').getPublicUrl(filePath);
-                    if (urlData && urlData.publicUrl) publicUrl = urlData.publicUrl;
-                }
+  // Contact card
+  const email = $('#contact-email');
+  email.textContent = s.email;
+  email.href = 'mailto:' + s.email;
+  const phone = $('#contact-phone');
+  phone.textContent = s.phone;
+  phone.href = 'https://wa.me/' + s.whatsapp;
+  $('#contact-location').textContent = s.location;
 
-                const newNote = {
-                    id: Date.now().toString(),
-                    title: title,
-                    class_name: className,
-                    subject: subject,
-                    description: desc,
-                    file_url: publicUrl,
-                    file_extension: fileExt,
-                    file_size: `${(file.size / (1024*1024)).toFixed(1)} MB`,
-                    created_at: new Date().toISOString()
-                };
+  // Footer
+  const fEmail = $('#footer-email');
+  fEmail.textContent = s.email;
+  fEmail.href = 'mailto:' + s.email;
+  const fPhone = $('#footer-phone');
+  fPhone.textContent = s.phone;
+  fPhone.href = 'https://wa.me/' + s.whatsapp;
 
-                // Attempt DB insert in Supabase
-                const { error: dbError } = await supabaseClient.from('cs_notes').insert([{
-                    title: title,
-                    class_name: className,
-                    subject: subject,
-                    description: desc,
-                    file_url: publicUrl,
-                    file_size: newNote.file_size,
-                    created_at: newNote.created_at
-                }]);
+  // WhatsApp float
+  $('#whatsapp-float').href = 'https://wa.me/' + s.whatsapp;
 
-                if (dbError) {
-                    console.warn('Supabase DB Insert note saved locally:', dbError);
-                }
+  // Typewriter
+  window.__titles = s.typewriterTitles.split(',').map(t => t.trim()).filter(Boolean);
+  if (!window.__titles.length) window.__titles = ['Educator'];
+  restartTypewriter();
 
-                // Push to array and update LocalStorage instantly
-                allNotes.unshift(newNote);
-                saveLocalNotes();
+  // Institutions
+  try {
+    const insts = Array.isArray(s.institutions) ? s.institutions : DEFAULT_INSTITUTIONS;
+    renderInstitutionsList(insts);
+  } catch (e) { console.error('Institutions error:', e); }
+}
 
-                showToast('Notes published successfully!');
-                toggleModal(false);
-                document.getElementById('uploadForm').reset();
-                document.getElementById('fileNameDisplay').innerText = 'Click or drag file here to upload';
-                renderNotes();
+async function loadProfileImage() {
+  const img = $('#profile-img');
+  const previewImg = $('#profile-preview-img');
+  try {
+    const blob = await getFileBlob(PROFILE_KEY);
+    if (blob) {
+      if (profileUrl) URL.revokeObjectURL(profileUrl);
+      profileUrl = URL.createObjectURL(blob);
+      img.src = profileUrl;
+      if (previewImg) previewImg.src = profileUrl;
+    } else {
+      const fallback = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="280" height="280"><rect width="280" height="280" fill="#0a0a12"/><circle cx="140" cy="100" r="50" fill="#8b5cf6"/><ellipse cx="140" cy="230" rx="80" ry="60" fill="#3b82f6"/><text x="140" y="270" text-anchor="middle" fill="#f0f0f5" font-size="12" font-family="sans-serif">No photo</text></svg>');
+      img.src = fallback;
+      if (previewImg) previewImg.src = fallback;
+    }
+  } catch (e) { console.error('Profile image error:', e); }
+}
 
-            } catch (err) {
-                console.error('Error uploading note:', err);
-                showToast('Failed to process file.', 'error');
-            } finally {
-                submitBtn.disabled = false;
-                btnText.innerText = 'Publish Note';
-            }
-        }
+/* ============================================================
+   9. TYPEWRITER (restartable)
+   ============================================================ */
+function restartTypewriter() {
+  if (typewriterTimer) clearTimeout(typewriterTimer);
+  twIdx = 0; twChar = 0; twDeleting = false;
+  stepTypewriter();
+}
 
-        function toggleModal(show) {
-            const modal = document.getElementById('uploadModal');
-            const container = document.getElementById('modalContainer');
+function stepTypewriter() {
+  const el = $('#typewriter');
+  if (!el) return;
+  const titles = window.__titles || ['Educator'];
+  const current = titles[twIdx];
+  if (!twDeleting) {
+    el.textContent = current.slice(0, ++twChar);
+    if (twChar === current.length) { twDeleting = true; typewriterTimer = setTimeout(stepTypewriter, 1800); return; }
+  } else {
+    el.textContent = current.slice(0, --twChar);
+    if (twChar === 0) { twDeleting = false; twIdx = (twIdx + 1) % titles.length; }
+  }
+  typewriterTimer = setTimeout(stepTypewriter, twDeleting ? 45 : 85);
+}
 
-            if (show) {
-                modal.classList.remove('hidden');
-                setTimeout(() => {
-                    modal.classList.remove('opacity-0');
-                    container.classList.remove('scale-95');
-                    container.classList.add('scale-100');
-                }, 10);
-            } else {
-                modal.classList.add('opacity-0');
-                container.classList.remove('scale-100');
-                container.classList.add('scale-95');
-                setTimeout(() => {
-                    modal.classList.add('hidden');
-                }, 300);
-            }
-        }
+/* ============================================================
+   10. INSTITUTIONS
+   ============================================================ */
+function renderInstitutionsList(insts) {
+  const grid = $('#institutions-grid');
+  if (!grid) return;
+  grid.innerHTML = insts.map((inst, i) => `
+    <div class="inst-card reveal" data-inst="${i}" tabindex="0" role="button" aria-expanded="false">
+      <div class="inst-header">
+        <div class="inst-icon">${inst.icon || '🎓'}</div>
+        <div><h3>${escapeHtml(inst.name || '')}</h3><div class="inst-role">${escapeHtml(inst.role || '')}</div></div>
+      </div>
+      <div class="inst-desc">${escapeHtml(inst.desc || '')}</div>
+      <span class="inst-toggle">Click to expand ▾</span>
+    </div>`).join('');
+  $$('.inst-card').forEach(card => {
+    const toggle = () => {
+      const expanded = card.classList.toggle('expanded');
+      card.setAttribute('aria-expanded', expanded);
+      card.querySelector('.inst-toggle').textContent = expanded ? 'Click to collapse ▴' : 'Click to expand ▾';
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
+  });
+  observeReveals();
+}
 
-        function showToast(msg, type = 'success') {
-            const toast = document.getElementById('toast');
-            const toastMsg = document.getElementById('toastMsg');
-            const toastIcon = document.getElementById('toastIcon');
+/* ============================================================
+   11. NOTES: LOAD / RENDER
+   ============================================================ */
+async function loadNotes() {
+  const loading = $('#notes-loading');
+  const grid = $('#notes-grid');
+  const empty = $('#notes-empty');
+  loading.style.display = 'grid';
+  grid.innerHTML = '';
+  empty.style.display = 'none';
 
-            toastMsg.innerText = msg;
-            if (type === 'error') {
-                toastIcon.className = 'fa-solid fa-circle-exclamation text-rose-400 text-lg';
-            } else {
-                toastIcon.className = 'fa-solid fa-circle-check text-brand-400 text-lg';
-            }
+  try {
+    const data = await getAllMeta();
+    allNotes = data.sort((a, b) => new Date(b.uploaded_at) - new Date(a.uploaded_at));
+    $('#notes-count').textContent = allNotes.length;
+    loading.style.display = 'none';
+    renderNotes();
+    populateFilters();
+  } catch (err) {
+    loading.style.display = 'none';
+    empty.style.display = 'block';
+    empty.innerHTML = `<div class="icon">⚠️</div><h3>Could not load notes</h3><p>${escapeHtml(err.message || String(err))}</p><button class="btn btn-outline btn-sm" onclick="loadNotes()" style="margin-top:1rem">Retry</button>`;
+  }
+}
 
-            toast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
-            setTimeout(() => {
-                toast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
-            }, 3500);
-        }
+function populateFilters() {
+  const subjects = [...new Set(allNotes.map(n => n.subject).filter(Boolean))].sort();
+  const chapters = [...new Set(allNotes.map(n => n.chapter_name).filter(Boolean))].sort();
+  const subSel = $('#filter-subject'), chSel = $('#filter-chapter');
+  const sv = subSel.value, cv = chSel.value;
+  subSel.innerHTML = '<option value="">All Subjects</option>' + subjects.map(s => `<option>${escapeHtml(s)}</option>`).join('');
+  chSel.innerHTML = '<option value="">All Chapters</option>' + chapters.map(c => `<option>${escapeHtml(c)}</option>`).join('');
+  subSel.value = sv; chSel.value = cv;
+}
 
-        function resetFilters() {
-            searchQuery = '';
-            activeClassFilter = 'All';
-            document.getElementById('searchInput').value = '';
-            
-            document.querySelectorAll('#classTabs .tab-btn').forEach((b, index) => {
-                if (index === 0) {
-                    b.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/30');
-                    b.classList.remove('bg-slate-900/80', 'text-slate-300');
-                } else {
-                    b.classList.remove('bg-brand-600', 'text-white');
-                    b.classList.add('bg-slate-900/80', 'text-slate-300');
-                }
-            });
-            document.getElementById('activeFilterBadge').innerText = 'Showing: All Classes';
-            renderNotes();
-        }
-    </script>
+function renderNotes() {
+  const grid = $('#notes-grid'), empty = $('#notes-empty');
+  const q = currentSearch.toLowerCase();
+  const filtered = allNotes.filter(n => {
+    if (currentClass && n.class_name !== currentClass) return false;
+    if (currentSubject && n.subject !== currentSubject) return false;
+    if (currentChapter && n.chapter_name !== currentChapter) return false;
+    if (q) {
+      const hay = [n.title, n.subject, n.chapter_name, n.class_name, n.description].filter(Boolean).join(' ').toLowerCase();
+      if (!hay.includes(q)) return false;
+    }
+    return true;
+  });
+  if (!filtered.length) { grid.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  grid.innerHTML = filtered.map(n => {
+    const fileType = (n.file_name || '').split('.').pop().toUpperCase() || 'FILE';
+    return `<div class="note-card" data-id="${n.id}">
+      <span class="note-badge">${escapeHtml(n.class_name || 'General')}</span>
+      <h3 class="note-title">${escapeHtml(n.title || 'Untitled')}</h3>
+      <div class="note-meta">
+        <span>📘 ${escapeHtml(n.subject || '—')}</span>
+        <span>📄 ${fileType}</span>
+        <span>💾 ${formatBytes(n.file_size)}</span>
+        <span>📅 ${formatDate(n.uploaded_at)}</span>
+      </div>
+      <p class="note-desc">${escapeHtml(n.description || 'No description provided.')}</p>
+      <div class="note-actions">
+        <button class="btn btn-sm btn-primary download-btn" data-id="${n.id}" data-name="${escapeHtml(n.file_name || 'note')}">⬇ Download</button>
+        ${isAdmin ? `<button class="btn btn-sm btn-outline edit-btn" data-id="${n.id}">✏ Edit</button>
+                     <button class="btn btn-sm btn-danger delete-btn" data-id="${n.id}">🗑 Delete</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  grid.querySelectorAll('.download-btn').forEach(b => b.addEventListener('click', () => downloadFile(b.dataset.id, b.dataset.name)));
+  grid.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', () => openEditNote(b.dataset.id)));
+  grid.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', () => {
+    deleteTargetId = b.dataset.id;
+    $('#delete-modal').classList.add('open');
+  }));
+}
+
+/* ============================================================
+   12. NOTES: DOWNLOAD
+   ============================================================ */
+async function downloadFile(id, name) {
+  try {
+    const blob = await getFileBlob(id);
+    if (!blob) { toast('File not found.', 'error'); return; }
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = name || 'note';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    toast('Download started.', 'success');
+  } catch (err) { toast('Download failed: ' + err.message, 'error'); }
+}
+
+/* ============================================================
+   13. NOTES: DELETE
+   ============================================================ */
+async function confirmDelete() {
+  if (!deleteTargetId) return;
+  const btn = $('#delete-confirm');
+  btn.disabled = true; btn.textContent = 'Deleting…';
+  try {
+    await deleteFileBlob(deleteTargetId);
+    await deleteMeta(deleteTargetId);
+    $('#delete-modal').classList.remove('open');
+    toast('Note deleted.', 'success');
+    await loadNotes();
+  } catch (err) {
+    toast('Delete failed: ' + err.message, 'error');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Confirm Delete';
+    deleteTargetId = null;
+  }
+}
+
+/* ============================================================
+   14. NOTES: UPLOAD
+   ============================================================ */
+function handleFile(file) {
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (!ALLOWED_EXT.includes(ext) && !ALLOWED_MIME.includes(file.type)) { toast('File type not allowed.', 'error'); $('#up-file').value = ''; return; }
+  if (file.size > MAX_SIZE) { toast('File exceeds 50 MB.', 'error'); $('#up-file').value = ''; return; }
+  selectedFile = file;
+  $('#file-drop-text').textContent = `${file.name} (${formatBytes(file.size)})`;
+}
+
+async function handleUpload(e) {
+  e.preventDefault();
+  if (!isAdmin) { toast('Admin login required.', 'error'); return; }
+  if (!selectedFile) { toast('Please select a file.', 'error'); return; }
+  const cls = $('#up-class').value, subject = $('#up-subject').value;
+  const title = $('#up-title').value.trim(), chapter = $('#up-chapter').value.trim(), desc = $('#up-desc').value.trim();
+  if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
+  const id = 'note_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
+  const pw = $('#upload-progress'), pb = $('#upload-progress-bar');
+  pw.classList.add('visible'); pb.style.width = '30%';
+  try {
+    await saveFileBlob(id, selectedFile);
+    pb.style.width = '70%';
+    await saveMeta({
+      id, title, class_name: cls, subject,
+      chapter_name: chapter || null, description: desc || null,
+      file_name: selectedFile.name, file_type: selectedFile.type,
+      file_size: selectedFile.size, uploaded_at: new Date().toISOString()
+    });
+    pb.style.width = '100%';
+    setTimeout(() => { pw.classList.remove('visible'); pb.style.width = '0%'; }, 600);
+    toast('Note uploaded.', 'success');
+    e.target.reset(); selectedFile = null;
+    $('#file-drop-text').textContent = 'Click or drag file';
+    await loadNotes();
+  } catch (err) {
+    pw.classList.remove('visible'); pb.style.width = '0%';
+    try { await deleteFileBlob(id); } catch {}
+    toast('Upload failed: ' + err.message, 'error');
+  }
+}
+
+/* ============================================================
+   15. NOTES: EDIT
+   ============================================================ */
+async function openEditNote(id) {
+  try {
+    const meta = await getMeta(id);
+    if (!meta) { toast('Note not found.', 'error'); return; }
+    currentEditId = id;
+    $('#edit-class').value = meta.class_name || '';
+    $('#edit-subject').value = meta.subject || '';
+    $('#edit-title').value = meta.title || '';
+    $('#edit-chapter').value = meta.chapter_name || '';
+    $('#edit-desc').value = meta.description || '';
+    $('#edit-file').value = '';
+    $('#edit-note-modal').classList.add('open');
+  } catch (err) { toast('Could not load note: ' + err.message, 'error'); }
+}
+
+async function handleEditSubmit(e) {
+  e.preventDefault();
+  if (!currentEditId) return;
+  try {
+    const meta = await getMeta(currentEditId);
+    if (!meta) { toast('Note not found.', 'error'); return; }
+    const cls = $('#edit-class').value, subject = $('#edit-subject').value;
+    const title = $('#edit-title').value.trim(), chapter = $('#edit-chapter').value.trim(), desc = $('#edit-desc').value.trim();
+    if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
+    let extra = {};
+    const newFile = $('#edit-file').files[0];
+    if (newFile) {
+      const ext = (newFile.name.split('.').pop() || '').toLowerCase();
+      if (!ALLOWED_EXT.includes(ext) && !ALLOWED_MIME.includes(newFile.type)) { toast('Invalid file type.', 'error'); return; }
+      if (newFile.size > MAX_SIZE) { toast('File too large.', 'error'); return; }
+      await saveFileBlob(currentEditId, newFile);
+      extra = { file_name: newFile.name, file_type: newFile.type, file_size: newFile.size };
+    }
+    await saveMeta({ ...meta, title, class_name: cls, subject, chapter_name: chapter || null, description: desc || null, ...extra });
+    toast('Note updated.', 'success');
+    $('#edit-note-modal').classList.remove('open');
+    currentEditId = null;
+    await loadNotes();
+  } catch (err) { toast('Update failed: ' + err.message, 'error'); }
+}
+
+/* ============================================================
+   16. ADMIN TAB SWITCHING
+   ============================================================ */
+function bindAdminTabs() {
+  $$('.admin-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      $$('.admin-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      $$('.admin-tab-content').forEach(c => c.classList.remove('active'));
+      const target = $('#tab-' + tab.dataset.tab);
+      if (target) target.classList.add('active');
+      // Refresh form data when opening a tab
+      if (tab.dataset.tab === 'profile') loadProfileTab();
+      if (tab.dataset.tab === 'content') loadContentTab();
+      if (tab.dataset.tab === 'contact') loadContactTab();
+      if (tab.dataset.tab === 'institutions') loadInstitutionsTab();
+    });
+  });
+}
+
+/* ============================================================
+   17. ADMIN: PROFILE TAB
+   ============================================================ */
+async function loadProfileTab() {
+  const s = getSettings();
+  $('#profile-name-input').value = s.profileName;
+  $('#profile-titles-input').value = s.typewriterTitles;
+  await loadProfileImage();
+}
+
+function bindProfileTab() {
+  $('#profile-file-input').addEventListener('change', async e => {
+    const file = e.target.files[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) { toast('Please select an image.', 'error'); return; }
+    if (file.size > 5 * 1024 * 1024) { toast('Image too large (max 5 MB).', 'error'); return; }
+    try {
+      await saveFileBlob(PROFILE_KEY, file);
+      await loadProfileImage();
+      toast('Profile photo updated.', 'success');
+    } catch (err) { toast('Upload failed: ' + err.message, 'error'); }
+    e.target.value = '';
+  });
+
+  $('#profile-remove-btn').addEventListener('click', async () => {
+    if (!confirm('Remove profile photo?')) return;
+    try {
+      await deleteFileBlob(PROFILE_KEY);
+      await loadProfileImage();
+      toast('Profile photo removed.', 'success');
+    } catch (err) { toast('Remove failed: ' + err.message, 'error'); }
+  });
+
+  $('#profile-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const s = getSettings();
+    s.profileName = $('#profile-name-input').value.trim() || s.profileName;
+    s.typewriterTitles = $('#profile-titles-input').value.trim() || s.typewriterTitles;
+    saveSettings(s);
+    applySettings();
+    toast('Profile saved.', 'success');
+  });
+}
+
+/* ============================================================
+   18. ADMIN: CONTENT TAB
+   ============================================================ */
+function loadContentTab() {
+  const s = getSettings();
+  $('#content-hero-title').value = s.heroTitleHtml;
+  $('#content-hero-subtitle').value = s.heroSubtitle;
+  $('#content-about-1').value = s.aboutText1;
+  $('#content-about-2').value = s.aboutText2;
+}
+
+function bindContentTab() {
+  $('#content-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const s = getSettings();
+    s.heroTitleHtml = $('#content-hero-title').value;
+    s.heroSubtitle = $('#content-hero-subtitle').value;
+    s.aboutText1 = $('#content-about-1').value;
+    s.aboutText2 = $('#content-about-2').value;
+    saveSettings(s);
+    applySettings();
+    toast('Content saved.', 'success');
+  });
+}
+
+/* ============================================================
+   19. ADMIN: CONTACT TAB
+   ============================================================ */
+function loadContactTab() {
+  const s = getSettings();
+  $('#contact-email-input').value = s.email;
+  $('#contact-phone-input').value = s.phone;
+  $('#contact-wa-input').value = s.whatsapp;
+  $('#contact-location-input').value = s.location;
+}
+
+function bindContactTab() {
+  $('#contact-form-admin').addEventListener('submit', e => {
+    e.preventDefault();
+    const s = getSettings();
+    s.email = $('#contact-email-input').value.trim();
+    s.phone = $('#contact-phone-input').value.trim();
+    s.whatsapp = $('#contact-wa-input').value.replace(/\D/g, '');
+    s.location = $('#contact-location-input').value.trim();
+    saveSettings(s);
+    applySettings();
+    toast('Contact info saved.', 'success');
+  });
+}
+
+/* ============================================================
+   20. ADMIN: INSTITUTIONS TAB
+   ============================================================ */
+function loadInstitutionsTab() {
+  const s = getSettings();
+  $('#institutions-json').value = JSON.stringify(s.institutions, null, 2);
+}
+
+function bindInstitutionsTab() {
+  $('#save-institutions-btn').addEventListener('click', () => {
+    try {
+      const parsed = JSON.parse($('#institutions-json').value);
+      if (!Array.isArray(parsed)) throw new Error('Must be a JSON array');
+      const s = getSettings();
+      s.institutions = parsed;
+      saveSettings(s);
+      applySettings();
+      toast('Institutions saved.', 'success');
+    } catch (err) { toast('Invalid JSON: ' + err.message, 'error'); }
+  });
+  $('#reset-institutions-btn').addEventListener('click', () => {
+    if (!confirm('Reset institutions to defaults?')) return;
+    const s = getSettings();
+    s.institutions = JSON.parse(JSON.stringify(DEFAULT_INSTITUTIONS));
+    saveSettings(s);
+    loadInstitutionsTab();
+    applySettings();
+    toast('Institutions reset.', 'success');
+  });
+}
+
+/* ============================================================
+   21. ADMIN: SECURITY TAB
+   ============================================================ */
+function bindSecurityTab() {
+  $('#password-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const cur = $('#pwd-current').value, n1 = $('#pwd-new').value, n2 = $('#pwd-confirm').value;
+    if (n1 !== n2) { toast('Passwords do not match.', 'error'); return; }
+    const err = changePassword(cur, n1);
+    if (err) { toast(err, 'error'); return; }
+    toast('Password updated.', 'success');
+    e.target.reset();
+  });
+}
+
+/* ============================================================
+   22. AUTH UI
+   ============================================================ */
+function setAdminState(admin) {
+  isAdmin = admin;
+  $('#admin-panel').classList.toggle('visible', admin);
+  $('#auth-bar').classList.toggle('visible', admin);
+  $('#admin-login-trigger').textContent = admin ? 'Admin Mode' : 'Admin Login';
+  renderNotes();
+}
+
+function bindAuth() {
+  $('#admin-login-trigger').addEventListener('click', () => {
+    if (isAdmin) { $('#notes').scrollIntoView({ behavior: 'smooth' }); return; }
+    $('#login-modal').classList.add('open');
+    setTimeout(() => $('#login-password').focus(), 100);
+  });
+  $('#login-cancel').addEventListener('click', () => $('#login-modal').classList.remove('open'));
+  $('#login-modal').addEventListener('click', e => { if (e.target === e.currentTarget) $('#login-modal').classList.remove('open'); });
+  $('#login-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const pwd = $('#login-password').value;
+    if (login(pwd)) {
+      $('#login-modal').classList.remove('open');
+      $('#login-password').value = '';
+      setAdminState(true);
+      toast('Signed in as Admin.', 'success');
+      $('#notes').scrollIntoView({ behavior: 'smooth' });
+      loadNotes();
+    } else {
+      toast('Incorrect password.', 'error');
+      $('#login-password').value = '';
+      $('#login-password').focus();
+    }
+  });
+  $('#logout-btn').addEventListener('click', () => {
+    logout(); setAdminState(false); toast('Logged out.', 'info'); loadNotes();
+  });
+}
+
+/* ============================================================
+   23. NOTES UI BINDINGS
+   ============================================================ */
+function bindNotesUI() {
+  $('#notes-search').addEventListener('input', e => { currentSearch = e.target.value; renderNotes(); });
+  $('#filter-subject').addEventListener('change', e => { currentSubject = e.target.value; renderNotes(); });
+  $('#filter-chapter').addEventListener('change', e => { currentChapter = e.target.value; renderNotes(); });
+  $$('.class-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      $$('.class-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      currentClass = tab.dataset.class;
+      renderNotes();
+    });
+  });
+  $$('#notes-dropdown .dropdown-menu a').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const cls = a.dataset.class;
+      currentClass = cls;
+      $$('.class-tab').forEach(t => t.classList.toggle('active', t.dataset.class === cls));
+      renderNotes();
+      $('#notes').scrollIntoView({ behavior: 'smooth' });
+      $('#nav-links').classList.remove('open');
+      $('#hamburger').classList.remove('active');
+    });
+  });
+}
+
+/* ============================================================
+   24. UPLOAD UI
+   ============================================================ */
+function bindUpload() {
+  const fd = $('#file-drop'), fi = $('#up-file');
+  fd.addEventListener('click', () => fi.click());
+  fd.addEventListener('dragover', e => { e.preventDefault(); fd.classList.add('dragover'); });
+  fd.addEventListener('dragleave', () => fd.classList.remove('dragover'));
+  fd.addEventListener('drop', e => { e.preventDefault(); fd.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]); });
+  fi.addEventListener('change', () => { if (fi.files.length) handleFile(fi.files[0]); });
+  $('#upload-form').addEventListener('submit', handleUpload);
+  $('#upload-cancel').addEventListener('click', () => {
+    $('#upload-form').reset();
+    selectedFile = null;
+    $('#file-drop-text').textContent = 'Click or drag file';
+    $('#upload-progress').classList.remove('visible');
+    $('#upload-progress-bar').style.width = '0%';
+  });
+  $('#refresh-admin-notes').addEventListener('click', () => loadNotes());
+}
+
+/* ============================================================
+   25. DELETE UI
+   ============================================================ */
+function bindDelete() {
+  $('#delete-cancel').addEventListener('click', () => { $('#delete-modal').classList.remove('open'); deleteTargetId = null; });
+  $('#delete-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#delete-modal').classList.remove('open'); deleteTargetId = null; } });
+  $('#delete-confirm').addEventListener('click', confirmDelete);
+}
+
+/* ============================================================
+   26. EDIT NOTE UI
+   ============================================================ */
+function bindEditNote() {
+  $('#edit-note-form').addEventListener('submit', handleEditSubmit);
+  $('#edit-cancel').addEventListener('click', () => { $('#edit-note-modal').classList.remove('open'); currentEditId = null; });
+  $('#edit-note-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#edit-note-modal').classList.remove('open'); currentEditId = null; } });
+}
+
+/* ============================================================
+   27. STUDENT CONTACT FORM
+   ============================================================ */
+function bindContactForm() {
+  $('#student-contact-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const s = getSettings();
+    const name = $('#cf-name').value.trim();
+    const email = $('#cf-email').value.trim();
+    const cls = $('#cf-class').value;
+    const school = $('#cf-school').value.trim();
+    const subject = $('#cf-subject').value.trim();
+    const message = $('#cf-message').value.trim();
+    if (!name || !email || !cls || !school || !subject || !message) { toast('Please fill all fields.', 'error'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Invalid email.', 'error'); return; }
+    const text = `*Student Message*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Class:* ${encodeURIComponent(cls)}%0A*School/College:* ${encodeURIComponent(school)}%0A*Subject:* ${encodeURIComponent(subject)}%0A%0A*Message:*%0A${encodeURIComponent(message)}`;
+    window.open(`https://wa.me/${s.whatsapp}?text=${text}`, '_blank', 'noopener');
+    toast('Opening WhatsApp…', 'info');
+  });
+}
+
+/* ============================================================
+   28. NAV / THEME / MISC
+   ============================================================ */
+function bindNav() {
+  $('#hamburger').addEventListener('click', () => {
+    const open = $('#nav-links').classList.toggle('open');
+    $('#hamburger').classList.toggle('active', open);
+    $('#hamburger').setAttribute('aria-expanded', open);
+  });
+  $('#notes-dropdown > button').addEventListener('click', e => {
+    e.stopPropagation();
+    if (window.innerWidth <= 900) $('#notes-dropdown').classList.toggle('open');
+  });
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
+    $('#scroll-progress').style.width = pct + '%';
+    $('#main-header').classList.toggle('scrolled', h.scrollTop > 40);
+    $('#back-to-top').classList.toggle('visible', h.scrollTop > 400);
+  });
+  $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+}
+
+function bindTheme() {
+  $('#theme-toggle').addEventListener('click', () => {
+    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.dataset.theme = next;
+    localStorage.setItem(THEME_KEY, next);
+    $('#theme-toggle').textContent = next === 'dark' ? '🌙' : '☀️';
+  });
+}
+
+function bindAccordion() {
+  $$('.accordion-header').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.accordion-item');
+      const open = item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+    });
+  });
+}
+
+/* ============================================================
+   29. OBSERVERS / COUNTERS / PARTICLES
+   ============================================================ */
+let revealObserver;
+function observeReveals() {
+  if (revealObserver) revealObserver.disconnect();
+  revealObserver = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); revealObserver.unobserve(en.target); } });
+  }, { threshold: 0.12 });
+  $$('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+}
+
+function animateCounters() {
+  $$('.counter-num[data-target]').forEach(el => {
+    const target = +el.dataset.target;
+    let cur = 0;
+    const step = Math.max(1, Math.floor(target / 40));
+    const iv = setInterval(() => {
+      cur += step;
+      if (cur >= target) { cur = target; clearInterval(iv); }
+      el.textContent = cur;
+    }, 30);
+  });
+}
+
+function createParticles() {
+  const wrap = $('#hero-particles');
+  if (!wrap) return;
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.animationDuration = (10 + Math.random() * 10) + 's';
+    p.style.background = ['#8b5cf6','#3b82f6','#06b6d4'][i % 3];
+    wrap.appendChild(p);
+  }
+}
+
+/* ============================================================
+   30. INIT
+   ============================================================ */
+async function init() {
+  try {
+    initTheme(); bindTheme();
+    bindAuth(); bindNav(); bindAccordion(); bindAdminTabs();
+    bindProfileTab(); bindContentTab(); bindContactTab(); bindInstitutionsTab(); bindSecurityTab();
+    bindNotesUI(); bindUpload(); bindDelete(); bindEditNote(); bindContactForm();
+    createParticles(); observeReveals(); animateCounters();
+    applySettings();
+    await loadProfileImage();
+    await checkStorageStatus();
+  } catch (e) { console.error('UI init error:', e); }
+
+  setTimeout(() => $('#loader').classList.add('hidden'), 400);
+  setAdminState(isAdminLoggedIn());
+  try { await loadNotes(); } catch (e) { console.error('loadNotes:', e); }
+}
+
+setTimeout(() => $('#loader').classList.add('hidden'), 4000);
+document.addEventListener('DOMContentLoaded', init);
+</script>
 </body>
 </html>
