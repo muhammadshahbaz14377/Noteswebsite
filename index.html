@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Muhammad Shahbaz | Computer Science Notes</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>MS</text></svg>">
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Fixed Supabase CDN version to prevent loading errors -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.47.0"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{--bg:#050508;--bg-2:#0a0a12;--surface:rgba(255,255,255,.04);--border:rgba(255,255,255,.08);--text:#f0f0f5;--muted:#8a8a9a;--purple:#8b5cf6;--blue:#3b82f6;--cyan:#06b6d4;--violet:#a855f7;--grad:linear-gradient(135deg,#8b5cf6,#3b82f6,#06b6d4);--glow:0 0 40px rgba(139,92,246,.35);--radius:18px;--font:'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;--transition:.3s cubic-bezier(.4,0,.2,1)}
@@ -222,6 +223,14 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 </head>
 <body>
 
+<!-- FAILSAFE: Loader will hide automatically after 3 seconds no matter what -->
+<script>
+  setTimeout(function() {
+    var loader = document.getElementById('loader');
+    if (loader) loader.classList.add('hidden');
+  }, 3000);
+</script>
+
 <div id="loader"><div class="spinner"></div><p style="color:var(--muted);font-size:.9rem">Connecting to Supabase…</p></div>
 <div id="scroll-progress"></div>
 
@@ -386,7 +395,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
       </div>
 
       <div class="admin-tab-content active" id="tab-notes">
-        <div class="admin-notice">✅ <strong>Supabase Connected:</strong> Files are stored in <code>cs-notes</code> bucket, metadata in <code>noteswebsite</code> table. Notes appear on all devices.</div>
+        <div class="admin-notice">✅ <strong>Supabase Connected:</strong> Notes are safely stored in the cloud and will appear on all devices.</div>
         <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;margin-bottom:1.2rem">
           <h3 style="font-size:1.1rem">Upload New Note</h3>
           <button class="btn btn-sm btn-outline" id="refresh-admin-notes">🔄 Refresh</button>
@@ -415,7 +424,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
             <div class="form-group"><label for="up-chapter">Chapter</label><input type="text" id="up-chapter" maxlength="100"></div>
             <div class="form-group full"><label for="up-desc">Description</label><textarea id="up-desc" rows="2" maxlength="500"></textarea></div>
             <div class="form-group full">
-              <label>File * (PDF, DOC, DOCX, PPT, PPTX, TXT, JPG, PNG — max 50 MB)</label>
+              <label>File * (PDF, DOC, PPT, TXT, JPG, PNG — max 50 MB)</label>
               <div class="file-drop" id="file-drop">
                 <input type="file" id="up-file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.jpg,.jpeg,.png">
                 <p id="file-drop-text">Click or drag file</p>
@@ -424,7 +433,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
           </div>
           <div class="upload-progress" id="upload-progress"><div class="upload-progress-bar" id="upload-progress-bar"></div></div>
           <div style="display:flex;gap:.8rem;margin-top:1rem;flex-wrap:wrap">
-            <button type="submit" class="btn btn-primary">Upload to Supabase</button>
+            <button type="submit" class="btn btn-primary">Upload to Cloud</button>
             <button type="button" class="btn btn-outline" id="upload-cancel">Reset</button>
           </div>
         </form>
@@ -435,13 +444,12 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
         <div class="profile-preview">
           <img id="profile-preview-img" src="" alt="Preview">
           <div>
-            <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem">Profile photo (stored in Supabase Storage)</p>
+            <p style="font-size:.85rem;color:var(--muted);margin-bottom:.6rem">Profile photo</p>
             <div style="display:flex;gap:.5rem;flex-wrap:wrap">
               <label class="btn btn-sm btn-primary" style="cursor:pointer">
                 📷 Change Photo
                 <input type="file" id="profile-file-input" accept="image/*" style="display:none">
               </label>
-              <button class="btn btn-sm btn-outline" id="profile-remove-btn">Remove</button>
             </div>
           </div>
         </div>
@@ -455,10 +463,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
       <div class="admin-tab-content" id="tab-content">
         <h3 style="margin-bottom:1.2rem">Hero & About Content</h3>
         <form id="content-form">
-          <div class="form-group">
-            <label>Hero Title (HTML allowed)</label>
-            <textarea id="content-hero-title" rows="2"></textarea>
-          </div>
+          <div class="form-group"><label>Hero Title (HTML allowed)</label><textarea id="content-hero-title" rows="2"></textarea></div>
           <div class="form-group"><label>Hero Subtitle</label><textarea id="content-hero-subtitle" rows="2"></textarea></div>
           <div class="form-group"><label>About Paragraph 1</label><textarea id="content-about-1" rows="3"></textarea></div>
           <div class="form-group"><label>About Paragraph 2</label><textarea id="content-about-2" rows="2"></textarea></div>
@@ -481,15 +486,11 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 
       <div class="admin-tab-content" id="tab-institutions">
         <h3 style="margin-bottom:1.2rem">Institutions (JSON)</h3>
-        <div class="admin-notice">Format: <code>{"name":"...","role":"...","desc":"...","icon":"🎓"}</code></div>
         <div class="form-group">
           <label>Institutions JSON</label>
-          <textarea id="institutions-json" rows="14" style="font-family:monospace;font-size:.8rem"></textarea>
+          <textarea id="institutions-json" rows="10" style="font-family:monospace;font-size:.8rem"></textarea>
         </div>
-        <div style="display:flex;gap:.8rem;flex-wrap:wrap">
-          <button class="btn btn-primary" id="save-institutions-btn">Save Institutions</button>
-          <button class="btn btn-outline" id="reset-institutions-btn">Reset to Defaults</button>
-        </div>
+        <button class="btn btn-primary" id="save-institutions-btn">Save Institutions</button>
       </div>
     </div>
   </div>
@@ -559,7 +560,6 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
     </div>
     <div class="footer-bottom">
       <p>© 2026 Muhammad Shahbaz. All Rights Reserved.</p>
-      <p style="margin-top:.4rem">Designed and Developed with Passion for Education and Technology.</p>
     </div>
   </div>
 </footer>
@@ -638,7 +638,7 @@ section{padding:3.5rem 0}.footer-grid{grid-template-columns:1fr}
 
 <script>
 /* ============================================================
-   1. CONFIG — YOUR SUPABASE CREDENTIALS
+   CONFIGURATION & SAFE INIT
    ============================================================ */
 const SUPABASE_URL = 'https://hepsdgxqawvmmswpcvnj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_-j_HjYLwwHPH2Qwng4ELTQ_qA6a_jyS';
@@ -647,29 +647,21 @@ const TABLE = 'noteswebsite';
 const PROFILE_PATH = 'profile/avatar';
 const MAX_SIZE = 50 * 1024 * 1024;
 const ALLOWED_EXT = ['pdf','doc','docx','ppt','pptx','txt','jpg','jpeg','png'];
-const AUTH_KEY = 'ms-admin-auth';
-const PWD_HASH_KEY = 'ms-admin-password';
-const SETTINGS_KEY = 'ms-site-settings';
-const THEME_KEY = 'ms-theme';
-const DEFAULT_PWD_HASH = btoa('11223344');
 
-/* ============================================================
-   2. SUPABASE CLIENT — SAFE INIT (fixes TDZ bug)
-   ============================================================ */
-let supabase = null;
+let supabaseClient = null;
 try {
   if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    console.log('✅ Supabase client initialized');
+    supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('✅ Supabase Client Initialized');
   } else {
-    console.error('❌ Supabase SDK not loaded from CDN');
+    console.error('❌ Supabase SDK not loaded.');
   }
 } catch (err) {
-  console.error('❌ Supabase init error:', err);
+  console.error('❌ Init Error:', err);
 }
 
 /* ============================================================
-   3. STATE
+   STATE
    ============================================================ */
 let allNotes = [];
 let currentClass = '';
@@ -680,7 +672,6 @@ let isAdmin = false;
 let deleteTargetNote = null;
 let selectedFile = null;
 let currentEditNote = null;
-let profileUrl = null;
 let typewriterTimer = null;
 let twIdx = 0, twChar = 0, twDeleting = false;
 
@@ -708,7 +699,7 @@ const DEFAULT_SETTINGS = {
 };
 
 /* ============================================================
-   4. HELPERS
+   HELPERS
    ============================================================ */
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
@@ -717,8 +708,8 @@ function toast(msg, type = 'info') {
   const el = document.createElement('div');
   el.className = `toast ${type}`;
   el.innerHTML = `<span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span><span>${msg}</span>`;
-  $('#toast-container').appendChild(el);
-  setTimeout(() => { el.style.opacity = '0'; el.style.transition = 'opacity .4s'; setTimeout(() => el.remove(), 400); }, 4500);
+  document.getElementById('toast-container').appendChild(el);
+  setTimeout(() => { el.style.opacity = '0'; setTimeout(() => el.remove(), 400); }, 4500);
 }
 
 function escapeHtml(str) {
@@ -743,40 +734,40 @@ function genId() {
 }
 
 /* ============================================================
-   5. SETTINGS (localStorage)
+   SETTINGS (localStorage)
    ============================================================ */
 function getSettings() {
   try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
+    const raw = localStorage.getItem('ms-site-settings');
     if (!raw) return JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
     return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
   } catch { return JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); }
 }
-function saveSettings(s) { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); }
+function saveSettings(s) { localStorage.setItem('ms-site-settings', JSON.stringify(s)); }
 
 /* ============================================================
-   6. SUPABASE OPERATIONS
+   SUPABASE OPERATIONS
    ============================================================ */
-async function sbPing() {
-  if (!supabase) return { ok: false, msg: 'Supabase SDK not loaded' };
+async function updateStorageStatus() {
+  const el = document.getElementById('storage-status'), text = document.getElementById('storage-text');
+  if (!supabaseClient) {
+    el.className = 'error'; text.textContent = 'Supabase Offline'; return;
+  }
   try {
-    const { error } = await supabase.from(TABLE).select('notes', { count: 'exact', head: true });
+    const { error } = await supabaseClient.from(TABLE).select('notes', { count: 'exact', head: true });
     if (error) {
-      if (error.code === 'PGRST205' || error.message?.includes('does not exist')) {
-        return { ok: false, msg: 'Table not found. Run SQL setup.' };
-      }
-      if (error.code === 'PGRST301' || error.message?.includes('permission')) {
-        return { ok: false, msg: 'RLS blocks access. Run SQL policies.' };
-      }
-      return { ok: false, msg: error.message };
+      el.className = 'error'; text.textContent = 'DB Error: Run SQL';
+    } else {
+      el.className = 'ready'; text.textContent = 'Supabase Connected';
     }
-    return { ok: true, msg: 'Connected to Supabase' };
-  } catch (e) { return { ok: false, msg: e.message || 'Network error' }; }
+  } catch {
+    el.className = 'error'; text.textContent = 'Network Error';
+  }
 }
 
 async function sbFetchAllNotes() {
-  if (!supabase) throw new Error('Supabase not initialized');
-  const { data, error } = await supabase.from(TABLE).select('*');
+  if (!supabaseClient) throw new Error('Supabase not initialized');
+  const { data, error } = await supabaseClient.from(TABLE).select('*');
   if (error) throw error;
   return (data || []).map(row => {
     try {
@@ -789,56 +780,47 @@ async function sbFetchAllNotes() {
 }
 
 async function sbUploadFile(file, path) {
-  if (!supabase) throw new Error('Supabase not initialized');
-  const { error } = await supabase.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: true });
+  if (!supabaseClient) throw new Error('Supabase not initialized');
+  const { error } = await supabaseClient.storage.from(BUCKET).upload(path, file, { contentType: file.type, upsert: true });
   if (error) throw error;
 }
 
 async function sbDeleteFile(path) {
-  if (!supabase || !path) return;
-  try { await supabase.storage.from(BUCKET).remove([path]); } catch (e) { console.warn('File delete failed:', e); }
+  if (!supabaseClient || !path) return;
+  try { await supabaseClient.storage.from(BUCKET).remove([path]); } catch (e) { console.warn('File delete failed:', e); }
 }
 
 async function sbInsertNote(metadata) {
-  if (!supabase) throw new Error('Supabase not initialized');
-  const { error } = await supabase.from(TABLE).insert({ notes: JSON.stringify(metadata) });
+  if (!supabaseClient) throw new Error('Supabase not initialized');
+  const { error } = await supabaseClient.from(TABLE).insert({ notes: JSON.stringify(metadata) });
   if (error) throw error;
 }
 
 async function sbDeleteNoteRow(rawJson) {
-  if (!supabase) throw new Error('Supabase not initialized');
-  const { error } = await supabase.from(TABLE).delete().eq('notes', rawJson);
+  if (!supabaseClient) throw new Error('Supabase not initialized');
+  const { error } = await supabaseClient.from(TABLE).delete().eq('notes', rawJson);
   if (error) throw error;
 }
 
 function sbPublicUrl(path) {
-  if (!supabase) return '';
-  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  if (!supabaseClient) return '';
+  const { data } = supabaseClient.storage.from(BUCKET).getPublicUrl(path);
   return data?.publicUrl || '';
 }
 
 /* ============================================================
-   7. AUTH (password gate)
+   AUTH
    ============================================================ */
-function getPasswordHash() { return localStorage.getItem(PWD_HASH_KEY) || DEFAULT_PWD_HASH; }
-function isAdminLoggedIn() { return localStorage.getItem(AUTH_KEY) === '1'; }
+function getPasswordHash() { return localStorage.getItem('ms-admin-password') || btoa('11223344'); }
+function isAdminLoggedIn() { return localStorage.getItem('ms-admin-auth') === '1'; }
 function login(pwd) {
-  if (btoa(pwd) === getPasswordHash()) { localStorage.setItem(AUTH_KEY, '1'); return true; }
+  if (btoa(pwd) === getPasswordHash()) { localStorage.setItem('ms-admin-auth', '1'); return true; }
   return false;
 }
-function logout() { localStorage.removeItem(AUTH_KEY); }
+function logout() { localStorage.removeItem('ms-admin-auth'); }
 
 /* ============================================================
-   8. THEME
-   ============================================================ */
-function initTheme() {
-  const saved = localStorage.getItem(THEME_KEY) || 'dark';
-  document.documentElement.dataset.theme = saved;
-  $('#theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️';
-}
-
-/* ============================================================
-   9. APPLY SETTINGS
+   APPLY SETTINGS TO PAGE
    ============================================================ */
 function applySettings() {
   const s = getSettings();
@@ -849,33 +831,28 @@ function applySettings() {
   $('#footer-logo-text').textContent = s.profileName;
   $('#about-text-1').textContent = s.aboutText1;
   $('#about-text-2').textContent = s.aboutText2;
+  
   const email = $('#contact-email'); email.textContent = s.email; email.href = 'mailto:' + s.email;
   const phone = $('#contact-phone'); phone.textContent = s.phone; phone.href = 'https://wa.me/' + s.whatsapp;
   $('#contact-location').textContent = s.location;
   const fe = $('#footer-email'); fe.textContent = s.email; fe.href = 'mailto:' + s.email;
   const fp = $('#footer-phone'); fp.textContent = s.phone; fp.href = 'https://wa.me/' + s.whatsapp;
   $('#whatsapp-float').href = 'https://wa.me/' + s.whatsapp;
+  
   window.__titles = s.typewriterTitles.split(',').map(t => t.trim()).filter(Boolean);
   if (!window.__titles.length) window.__titles = ['Educator'];
   restartTypewriter();
   renderInstitutions(Array.isArray(s.institutions) ? s.institutions : DEFAULT_INSTITUTIONS);
 }
 
-/* ============================================================
-   10. PROFILE IMAGE (Supabase Storage)
-   ============================================================ */
 async function loadProfileImage() {
   const img = $('#profile-img');
   const preview = $('#profile-preview-img');
   let url = '';
-  if (supabase) {
+  if (supabaseClient) {
     url = sbPublicUrl(PROFILE_PATH);
-    // Test if exists with a HEAD request; if 400/404, fallback
     if (url) {
-      try {
-        const res = await fetch(url, { method: 'HEAD' });
-        if (!res.ok) url = '';
-      } catch { url = ''; }
+      try { const res = await fetch(url, { method: 'HEAD' }); if (!res.ok) url = ''; } catch { url = ''; }
     }
   }
   if (!url) {
@@ -883,14 +860,12 @@ async function loadProfileImage() {
   } else {
     url += '?v=' + Date.now();
   }
-  if (profileUrl && profileUrl.startsWith('blob:')) URL.revokeObjectURL(profileUrl);
-  profileUrl = url;
   img.src = url;
   if (preview) preview.src = url;
 }
 
 /* ============================================================
-   11. TYPEWRITER
+   TYPEWRITER
    ============================================================ */
 function restartTypewriter() {
   if (typewriterTimer) clearTimeout(typewriterTimer);
@@ -913,7 +888,7 @@ function stepTypewriter() {
 }
 
 /* ============================================================
-   12. INSTITUTIONS
+   INSTITUTIONS
    ============================================================ */
 function renderInstitutions(insts) {
   const grid = $('#institutions-grid');
@@ -934,13 +909,12 @@ function renderInstitutions(insts) {
       card.querySelector('.inst-toggle').textContent = exp ? 'Click to collapse ▴' : 'Click to expand ▾';
     };
     card.addEventListener('click', toggle);
-    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); } });
   });
   observeReveals();
 }
 
 /* ============================================================
-   13. NOTES: LOAD
+   NOTES: LOAD & RENDER
    ============================================================ */
 async function loadNotes() {
   const loading = $('#notes-loading'), grid = $('#notes-grid'), empty = $('#notes-empty');
@@ -948,10 +922,10 @@ async function loadNotes() {
   grid.innerHTML = '';
   empty.style.display = 'none';
 
-  if (!supabase) {
+  if (!supabaseClient) {
     loading.style.display = 'none';
     empty.style.display = 'block';
-    empty.innerHTML = `<div class="icon">⚠️</div><h3>Supabase unavailable</h3><p>SDK not loaded. Check internet.</p><button class="btn btn-outline btn-sm" onclick="loadNotes()" style="margin-top:1rem">Retry</button>`;
+    empty.innerHTML = `<div class="icon">⚠️</div><h3>Supabase unavailable</h3><p>SDK not loaded. Check internet.</p>`;
     return;
   }
 
@@ -966,7 +940,6 @@ async function loadNotes() {
     loading.style.display = 'none';
     empty.style.display = 'block';
     empty.innerHTML = `<div class="icon">⚠️</div><h3>Could not load notes</h3><p>${escapeHtml(err.message || String(err))}</p><button class="btn btn-outline btn-sm" onclick="loadNotes()" style="margin-top:1rem">Retry</button>`;
-    toast('Load failed: ' + (err.message || err), 'error');
   }
 }
 
@@ -1014,6 +987,7 @@ function renderNotes() {
       </div>
     </div>`;
   }).join('');
+  
   grid.querySelectorAll('.download-btn').forEach(b => b.addEventListener('click', () => downloadNote(b.dataset.id)));
   grid.querySelectorAll('.edit-btn').forEach(b => b.addEventListener('click', () => openEditNote(b.dataset.id)));
   grid.querySelectorAll('.delete-btn').forEach(b => b.addEventListener('click', () => {
@@ -1022,9 +996,6 @@ function renderNotes() {
   }));
 }
 
-/* ============================================================
-   14. NOTES: DOWNLOAD
-   ============================================================ */
 function downloadNote(id) {
   const note = allNotes.find(n => n.id === id);
   if (!note || !note.file_path) { toast('File not found.', 'error'); return; }
@@ -1034,13 +1005,12 @@ function downloadNote(id) {
   a.href = url;
   a.download = note.file_name || 'note';
   a.target = '_blank';
-  a.rel = 'noopener';
   document.body.appendChild(a); a.click(); a.remove();
   toast('Download started.', 'success');
 }
 
 /* ============================================================
-   15. NOTES: DELETE
+   NOTES: DELETE, UPLOAD, EDIT
    ============================================================ */
 async function confirmDelete() {
   if (!deleteTargetNote) return;
@@ -1060,9 +1030,6 @@ async function confirmDelete() {
   }
 }
 
-/* ============================================================
-   16. NOTES: UPLOAD
-   ============================================================ */
 function handleFileSelect(file) {
   const ext = (file.name.split('.').pop() || '').toLowerCase();
   if (!ALLOWED_EXT.includes(ext)) { toast('File type not allowed.', 'error'); $('#up-file').value = ''; return; }
@@ -1074,7 +1041,6 @@ function handleFileSelect(file) {
 async function handleUpload(e) {
   e.preventDefault();
   if (!isAdmin) { toast('Admin login required.', 'error'); return; }
-  if (!supabase) { toast('Supabase not available.', 'error'); return; }
   if (!selectedFile) { toast('Please select a file.', 'error'); return; }
 
   const cls = $('#up-class').value, subject = $('#up-subject').value;
@@ -1087,16 +1053,12 @@ async function handleUpload(e) {
   pw.classList.add('visible'); pb.style.width = '20%';
 
   try {
-    // 1) Upload file to Storage
     await sbUploadFile(selectedFile, file_path);
     pb.style.width = '60%';
-
-    // 2) Insert metadata row
+    
     const metadata = {
-      id: genId(),
-      title, class_name: cls, subject,
-      chapter_name: chapter || null,
-      description: desc || null,
+      id: genId(), title, class_name: cls, subject,
+      chapter_name: chapter || null, description: desc || null,
       file_path, file_name: selectedFile.name,
       file_type: selectedFile.type, file_size: selectedFile.size,
       uploaded_at: new Date().toISOString()
@@ -1105,7 +1067,7 @@ async function handleUpload(e) {
     pb.style.width = '100%';
 
     setTimeout(() => { pw.classList.remove('visible'); pb.style.width = '0%'; }, 600);
-    toast('Note uploaded to Supabase.', 'success');
+    toast('Note uploaded to cloud.', 'success');
     e.target.reset(); selectedFile = null;
     $('#file-drop-text').textContent = 'Click or drag file';
     await loadNotes();
@@ -1116,9 +1078,6 @@ async function handleUpload(e) {
   }
 }
 
-/* ============================================================
-   17. NOTES: EDIT
-   ============================================================ */
 function openEditNote(id) {
   const note = allNotes.find(n => n.id === id);
   if (!note) { toast('Note not found.', 'error'); return; }
@@ -1139,12 +1098,7 @@ async function handleEditSubmit(e) {
   const title = $('#edit-title').value.trim(), chapter = $('#edit-chapter').value.trim(), desc = $('#edit-desc').value.trim();
   if (!cls || !subject || !title) { toast('Class, Subject, Title required.', 'error'); return; }
 
-  const updated = {
-    ...currentEditNote,
-    title, class_name: cls, subject,
-    chapter_name: chapter || null,
-    description: desc || null
-  };
+  const updated = { ...currentEditNote, title, class_name: cls, subject, chapter_name: chapter || null, description: desc || null };
   delete updated._raw;
 
   try {
@@ -1152,7 +1106,6 @@ async function handleEditSubmit(e) {
     if (newFile) {
       const ext = newFile.name.split('.').pop().toLowerCase();
       if (!ALLOWED_EXT.includes(ext)) { toast('Invalid file type.', 'error'); return; }
-      if (newFile.size > MAX_SIZE) { toast('File too large.', 'error'); return; }
       const newPath = `notes/${Date.now()}-${Math.random().toString(36).slice(2,9)}.${ext}`;
       await sbUploadFile(newFile, newPath);
       if (currentEditNote.file_path) await sbDeleteFile(currentEditNote.file_path);
@@ -1161,11 +1114,8 @@ async function handleEditSubmit(e) {
       updated.file_type = newFile.type;
       updated.file_size = newFile.size;
     }
-
-    // Update row: delete old, insert new
     await sbDeleteNoteRow(currentEditNote._raw);
     await sbInsertNote(updated);
-
     toast('Note updated.', 'success');
     $('#edit-note-modal').classList.remove('open');
     currentEditNote = null;
@@ -1176,26 +1126,7 @@ async function handleEditSubmit(e) {
 }
 
 /* ============================================================
-   18. ADMIN TABS
-   ============================================================ */
-function bindAdminTabs() {
-  $$('.admin-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      $$('.admin-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      $$('.admin-tab-content').forEach(c => c.classList.remove('active'));
-      const t = $('#tab-' + tab.dataset.tab);
-      if (t) t.classList.add('active');
-      if (tab.dataset.tab === 'profile') loadProfileTab();
-      if (tab.dataset.tab === 'content') loadContentTab();
-      if (tab.dataset.tab === 'contact') loadContactTab();
-      if (tab.dataset.tab === 'institutions') loadInstitutionsTab();
-    });
-  });
-}
-
-/* ============================================================
-   19. PROFILE TAB
+   PROFILE & ADMIN TABS
    ============================================================ */
 function loadProfileTab() {
   const s = getSettings();
@@ -1204,44 +1135,6 @@ function loadProfileTab() {
   loadProfileImage();
 }
 
-function bindProfileTab() {
-  $('#profile-file-input').addEventListener('change', async e => {
-    const file = e.target.files[0];
-    if (!file) return;
-    if (!file.type.startsWith('image/')) { toast('Select an image.', 'error'); return; }
-    if (file.size > 5 * 1024 * 1024) { toast('Image too large (max 5 MB).', 'error'); return; }
-    if (!supabase) { toast('Supabase unavailable.', 'error'); return; }
-    try {
-      await sbUploadFile(file, PROFILE_PATH);
-      await loadProfileImage();
-      toast('Profile photo uploaded to Supabase.', 'success');
-    } catch (err) { toast('Upload failed: ' + (err.message || err), 'error'); }
-    e.target.value = '';
-  });
-
-  $('#profile-remove-btn').addEventListener('click', async () => {
-    if (!confirm('Remove profile photo?')) return;
-    try {
-      await sbDeleteFile(PROFILE_PATH);
-      await loadProfileImage();
-      toast('Profile photo removed.', 'success');
-    } catch (err) { toast('Remove failed: ' + (err.message || err), 'error'); }
-  });
-
-  $('#profile-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const s = getSettings();
-    s.profileName = $('#profile-name-input').value.trim() || s.profileName;
-    s.typewriterTitles = $('#profile-titles-input').value.trim() || s.typewriterTitles;
-    saveSettings(s);
-    applySettings();
-    toast('Profile saved.', 'success');
-  });
-}
-
-/* ============================================================
-   20. CONTENT TAB
-   ============================================================ */
 function loadContentTab() {
   const s = getSettings();
   $('#content-hero-title').value = s.heroTitleHtml;
@@ -1249,22 +1142,7 @@ function loadContentTab() {
   $('#content-about-1').value = s.aboutText1;
   $('#content-about-2').value = s.aboutText2;
 }
-function bindContentTab() {
-  $('#content-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const s = getSettings();
-    s.heroTitleHtml = $('#content-hero-title').value;
-    s.heroSubtitle = $('#content-hero-subtitle').value;
-    s.aboutText1 = $('#content-about-1').value;
-    s.aboutText2 = $('#content-about-2').value;
-    saveSettings(s); applySettings();
-    toast('Content saved.', 'success');
-  });
-}
 
-/* ============================================================
-   21. CONTACT TAB
-   ============================================================ */
 function loadContactTab() {
   const s = getSettings();
   $('#contact-email-input').value = s.email;
@@ -1272,47 +1150,14 @@ function loadContactTab() {
   $('#contact-wa-input').value = s.whatsapp;
   $('#contact-location-input').value = s.location;
 }
-function bindContactTab() {
-  $('#contact-form-admin').addEventListener('submit', e => {
-    e.preventDefault();
-    const s = getSettings();
-    s.email = $('#contact-email-input').value.trim();
-    s.phone = $('#contact-phone-input').value.trim();
-    s.whatsapp = $('#contact-wa-input').value.replace(/\D/g, '');
-    s.location = $('#contact-location-input').value.trim();
-    saveSettings(s); applySettings();
-    toast('Contact saved.', 'success');
-  });
-}
 
-/* ============================================================
-   22. INSTITUTIONS TAB
-   ============================================================ */
 function loadInstitutionsTab() {
   const s = getSettings();
   $('#institutions-json').value = JSON.stringify(s.institutions, null, 2);
 }
-function bindInstitutionsTab() {
-  $('#save-institutions-btn').addEventListener('click', () => {
-    try {
-      const parsed = JSON.parse($('#institutions-json').value);
-      if (!Array.isArray(parsed)) throw new Error('Must be a JSON array');
-      const s = getSettings(); s.institutions = parsed;
-      saveSettings(s); applySettings();
-      toast('Institutions saved.', 'success');
-    } catch (err) { toast('Invalid JSON: ' + err.message, 'error'); }
-  });
-  $('#reset-institutions-btn').addEventListener('click', () => {
-    if (!confirm('Reset to defaults?')) return;
-    const s = getSettings();
-    s.institutions = JSON.parse(JSON.stringify(DEFAULT_INSTITUTIONS));
-    saveSettings(s); loadInstitutionsTab(); applySettings();
-    toast('Reset done.', 'success');
-  });
-}
 
 /* ============================================================
-   23. AUTH UI
+   BINDINGS & UI
    ============================================================ */
 function setAdminState(admin) {
   isAdmin = admin;
@@ -1322,170 +1167,11 @@ function setAdminState(admin) {
   renderNotes();
 }
 
-function bindAuth() {
-  $('#admin-login-trigger').addEventListener('click', () => {
-    if (isAdmin) { $('#notes').scrollIntoView({ behavior: 'smooth' }); return; }
-    $('#login-modal').classList.add('open');
-    setTimeout(() => $('#login-password').focus(), 100);
-  });
-  $('#login-cancel').addEventListener('click', () => $('#login-modal').classList.remove('open'));
-  $('#login-modal').addEventListener('click', e => { if (e.target === e.currentTarget) $('#login-modal').classList.remove('open'); });
-  $('#login-form').addEventListener('submit', e => {
-    e.preventDefault();
-    if (login($('#login-password').value)) {
-      $('#login-modal').classList.remove('open');
-      $('#login-password').value = '';
-      setAdminState(true);
-      toast('Signed in as Admin.', 'success');
-      $('#notes').scrollIntoView({ behavior: 'smooth' });
-      loadNotes();
-    } else {
-      toast('Incorrect password.', 'error');
-      $('#login-password').value = '';
-      $('#login-password').focus();
-    }
-  });
-  $('#logout-btn').addEventListener('click', () => { logout(); setAdminState(false); toast('Logged out.', 'info'); loadNotes(); });
-}
-
-/* ============================================================
-   24. NOTES UI
-   ============================================================ */
-function bindNotesUI() {
-  $('#notes-search').addEventListener('input', e => { currentSearch = e.target.value; renderNotes(); });
-  $('#filter-subject').addEventListener('change', e => { currentSubject = e.target.value; renderNotes(); });
-  $('#filter-chapter').addEventListener('change', e => { currentChapter = e.target.value; renderNotes(); });
-  $$('.class-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      $$('.class-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentClass = tab.dataset.class;
-      renderNotes();
-    });
-  });
-  $$('#notes-dropdown .dropdown-menu a').forEach(a => {
-    a.addEventListener('click', e => {
-      e.preventDefault();
-      const cls = a.dataset.class;
-      currentClass = cls;
-      $$('.class-tab').forEach(t => t.classList.toggle('active', t.dataset.class === cls));
-      renderNotes();
-      $('#notes').scrollIntoView({ behavior: 'smooth' });
-      $('#nav-links').classList.remove('open');
-      $('#hamburger').classList.remove('active');
-    });
-  });
-}
-
-/* ============================================================
-   25. UPLOAD UI
-   ============================================================ */
-function bindUpload() {
-  const fd = $('#file-drop'), fi = $('#up-file');
-  fd.addEventListener('click', () => fi.click());
-  fd.addEventListener('dragover', e => { e.preventDefault(); fd.classList.add('dragover'); });
-  fd.addEventListener('dragleave', () => fd.classList.remove('dragover'));
-  fd.addEventListener('drop', e => { e.preventDefault(); fd.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]); });
-  fi.addEventListener('change', () => { if (fi.files.length) handleFileSelect(fi.files[0]); });
-  $('#upload-form').addEventListener('submit', handleUpload);
-  $('#upload-cancel').addEventListener('click', () => {
-    $('#upload-form').reset();
-    selectedFile = null;
-    $('#file-drop-text').textContent = 'Click or drag file';
-    $('#upload-progress').classList.remove('visible');
-    $('#upload-progress-bar').style.width = '0%';
-  });
-  $('#refresh-admin-notes').addEventListener('click', () => loadNotes());
-}
-
-/* ============================================================
-   26. DELETE UI
-   ============================================================ */
-function bindDelete() {
-  $('#delete-cancel').addEventListener('click', () => { $('#delete-modal').classList.remove('open'); deleteTargetNote = null; });
-  $('#delete-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#delete-modal').classList.remove('open'); deleteTargetNote = null; } });
-  $('#delete-confirm').addEventListener('click', confirmDelete);
-}
-
-/* ============================================================
-   27. EDIT NOTE UI
-   ============================================================ */
-function bindEditNote() {
-  $('#edit-note-form').addEventListener('submit', handleEditSubmit);
-  $('#edit-cancel').addEventListener('click', () => { $('#edit-note-modal').classList.remove('open'); currentEditNote = null; });
-  $('#edit-note-modal').addEventListener('click', e => { if (e.target === e.currentTarget) { $('#edit-note-modal').classList.remove('open'); currentEditNote = null; } });
-}
-
-/* ============================================================
-   28. STUDENT CONTACT FORM
-   ============================================================ */
-function bindContactForm() {
-  $('#student-contact-form').addEventListener('submit', e => {
-    e.preventDefault();
-    const s = getSettings();
-    const name = $('#cf-name').value.trim(), email = $('#cf-email').value.trim();
-    const cls = $('#cf-class').value, school = $('#cf-school').value.trim();
-    const subj = $('#cf-subject').value.trim(), msg = $('#cf-message').value.trim();
-    if (!name || !email || !cls || !school || !subj || !msg) { toast('Fill all fields.', 'error'); return; }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { toast('Invalid email.', 'error'); return; }
-    const text = `*Student Message*%0A%0A*Name:* ${encodeURIComponent(name)}%0A*Email:* ${encodeURIComponent(email)}%0A*Class:* ${encodeURIComponent(cls)}%0A*School:* ${encodeURIComponent(school)}%0A*Subject:* ${encodeURIComponent(subj)}%0A%0A*Message:*%0A${encodeURIComponent(msg)}`;
-    window.open(`https://wa.me/${s.whatsapp}?text=${text}`, '_blank', 'noopener');
-    toast('Opening WhatsApp…', 'info');
-  });
-}
-
-/* ============================================================
-   29. NAV / THEME / MISC
-   ============================================================ */
-function bindNav() {
-  $('#hamburger').addEventListener('click', () => {
-    const open = $('#nav-links').classList.toggle('open');
-    $('#hamburger').classList.toggle('active', open);
-    $('#hamburger').setAttribute('aria-expanded', open);
-  });
-  $('#notes-dropdown > button').addEventListener('click', e => {
-    e.stopPropagation();
-    if (window.innerWidth <= 900) $('#notes-dropdown').classList.toggle('open');
-  });
-  window.addEventListener('scroll', () => {
-    const h = document.documentElement;
-    const pct = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100;
-    $('#scroll-progress').style.width = pct + '%';
-    $('#main-header').classList.toggle('scrolled', h.scrollTop > 40);
-    $('#back-to-top').classList.toggle('visible', h.scrollTop > 400);
-  });
-  $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
-}
-
-function bindTheme() {
-  $('#theme-toggle').addEventListener('click', () => {
-    const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.dataset.theme = next;
-    localStorage.setItem(THEME_KEY, next);
-    $('#theme-toggle').textContent = next === 'dark' ? '🌙' : '☀️';
-  });
-}
-
-function bindAccordion() {
-  $$('.accordion-header').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item = btn.closest('.accordion-item');
-      const open = item.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open);
-    });
-  });
-}
-
-/* ============================================================
-   30. OBSERVERS / COUNTERS / PARTICLES
-   ============================================================ */
-let revealObserver;
 function observeReveals() {
-  if (revealObserver) revealObserver.disconnect();
-  revealObserver = new IntersectionObserver(entries => {
-    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); revealObserver.unobserve(en.target); } });
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('visible'); obs.unobserve(en.target); } });
   }, { threshold: 0.12 });
-  $$('.reveal:not(.visible)').forEach(el => revealObserver.observe(el));
+  $$('.reveal:not(.visible)').forEach(el => obs.observe(el));
 }
 
 function animateCounters() {
@@ -1493,11 +1179,7 @@ function animateCounters() {
     const t = +el.dataset.target;
     let c = 0;
     const step = Math.max(1, Math.floor(t/40));
-    const iv = setInterval(() => {
-      c += step;
-      if (c >= t) { c = t; clearInterval(iv); }
-      el.textContent = c;
-    }, 30);
+    const iv = setInterval(() => { c += step; if (c >= t) { c = t; clearInterval(iv); } el.textContent = c; }, 30);
   });
 }
 
@@ -1516,53 +1198,186 @@ function createParticles() {
   }
 }
 
-/* ============================================================
-   31. STORAGE STATUS PILL
-   ============================================================ */
-async function updateStorageStatus() {
-  const el = $('#storage-status'), text = $('#storage-text');
-  if (!supabase) {
-    el.className = 'error';
-    text.textContent = 'Supabase SDK not loaded';
-    return;
-  }
-  const res = await sbPing();
-  if (res.ok) {
-    el.className = 'ready';
-    text.textContent = 'Supabase connected';
-  } else {
-    el.className = 'error';
-    text.textContent = res.msg;
-  }
+function initTheme() {
+  const saved = localStorage.getItem('ms-theme') || 'dark';
+  document.documentElement.dataset.theme = saved;
+  $('#theme-toggle').textContent = saved === 'dark' ? '🌙' : '☀️';
 }
 
 /* ============================================================
-   32. INIT
+   INIT & EVENT LISTENERS
    ============================================================ */
 async function init() {
   try {
-    initTheme(); bindTheme();
-    bindAuth(); bindNav(); bindAccordion(); bindAdminTabs();
-    bindProfileTab(); bindContentTab(); bindContactTab(); bindInstitutionsTab();
-    bindNotesUI(); bindUpload(); bindDelete(); bindEditNote(); bindContactForm();
-    createParticles(); observeReveals(); animateCounters();
+    initTheme();
+    $('#theme-toggle').addEventListener('click', () => {
+      const next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('ms-theme', next);
+      $('#theme-toggle').textContent = next === 'dark' ? '🌙' : '☀️';
+    });
+
+    // Auth
+    $('#admin-login-trigger').addEventListener('click', () => {
+      if (isAdmin) { $('#notes').scrollIntoView({ behavior: 'smooth' }); return; }
+      $('#login-modal').classList.add('open');
+    });
+    $('#login-cancel').addEventListener('click', () => $('#login-modal').classList.remove('open'));
+    $('#login-form').addEventListener('submit', e => {
+      e.preventDefault();
+      if (login($('#login-password').value)) {
+        $('#login-modal').classList.remove('open');
+        $('#login-password').value = '';
+        setAdminState(true);
+        toast('Admin logged in.', 'success');
+        $('#notes').scrollIntoView({ behavior: 'smooth' });
+        loadNotes();
+      } else {
+        toast('Incorrect password.', 'error');
+      }
+    });
+    $('#logout-btn').addEventListener('click', () => { logout(); setAdminState(false); toast('Logged out.', 'info'); loadNotes(); });
+
+    // Nav
+    $('#hamburger').addEventListener('click', () => {
+      const open = $('#nav-links').classList.toggle('open');
+      $('#hamburger').classList.toggle('active', open);
+    });
+    window.addEventListener('scroll', () => {
+      const h = document.documentElement;
+      $('#scroll-progress').style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight)) * 100 + '%';
+      $('#main-header').classList.toggle('scrolled', h.scrollTop > 40);
+      $('#back-to-top').classList.toggle('visible', h.scrollTop > 400);
+    });
+    $('#back-to-top').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    // Notes UI
+    $('#notes-search').addEventListener('input', e => { currentSearch = e.target.value; renderNotes(); });
+    $('#filter-subject').addEventListener('change', e => { currentSubject = e.target.value; renderNotes(); });
+    $('#filter-chapter').addEventListener('change', e => { currentChapter = e.target.value; renderNotes(); });
+    $$('.class-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        $$('.class-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentClass = tab.dataset.class;
+        renderNotes();
+      });
+    });
+
+    // Upload UI
+    const fd = $('#file-drop'), fi = $('#up-file');
+    fd.addEventListener('click', () => fi.click());
+    fd.addEventListener('dragover', e => { e.preventDefault(); fd.classList.add('dragover'); });
+    fd.addEventListener('dragleave', () => fd.classList.remove('dragover'));
+    fd.addEventListener('drop', e => { e.preventDefault(); fd.classList.remove('dragover'); if (e.dataTransfer.files.length) handleFileSelect(e.dataTransfer.files[0]); });
+    fi.addEventListener('change', () => { if (fi.files.length) handleFileSelect(fi.files[0]); });
+    $('#upload-form').addEventListener('submit', handleUpload);
+    $('#upload-cancel').addEventListener('click', () => {
+      $('#upload-form').reset(); selectedFile = null;
+      $('#file-drop-text').textContent = 'Click or drag file';
+      $('#upload-progress').classList.remove('visible');
+      $('#upload-progress-bar').style.width = '0%';
+    });
+    $('#refresh-admin-notes').addEventListener('click', () => loadNotes());
+
+    // Delete UI
+    $('#delete-cancel').addEventListener('click', () => { $('#delete-modal').classList.remove('open'); deleteTargetNote = null; });
+    $('#delete-confirm').addEventListener('click', confirmDelete);
+
+    // Edit UI
+    $('#edit-note-form').addEventListener('submit', handleEditSubmit);
+    $('#edit-cancel').addEventListener('click', () => { $('#edit-note-modal').classList.remove('open'); currentEditNote = null; });
+
+    // Admin Tabs
+    $$('.admin-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        $$('.admin-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        $$('.admin-tab-content').forEach(c => c.classList.remove('active'));
+        const t = $('#tab-' + tab.dataset.tab);
+        if (t) t.classList.add('active');
+        if (tab.dataset.tab === 'profile') loadProfileTab();
+        if (tab.dataset.tab === 'content') loadContentTab();
+        if (tab.dataset.tab === 'contact') loadContactTab();
+        if (tab.dataset.tab === 'institutions') loadInstitutionsTab();
+      });
+    });
+
+    // Admin Profile Upload
+    $('#profile-file-input').addEventListener('change', async e => {
+      const file = e.target.files[0];
+      if (!file) return;
+      if (!file.type.startsWith('image/')) { toast('Select an image.', 'error'); return; }
+      try {
+        await sbUploadFile(file, PROFILE_PATH);
+        await loadProfileImage();
+        toast('Profile photo uploaded.', 'success');
+      } catch (err) { toast('Upload failed: ' + err.message, 'error'); }
+      e.target.value = '';
+    });
+    $('#profile-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const s = getSettings();
+      s.profileName = $('#profile-name-input').value.trim() || s.profileName;
+      s.typewriterTitles = $('#profile-titles-input').value.trim() || s.typewriterTitles;
+      saveSettings(s); applySettings(); toast('Profile saved.', 'success');
+    });
+
+    // Admin Content
+    $('#content-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const s = getSettings();
+      s.heroTitleHtml = $('#content-hero-title').value;
+      s.heroSubtitle = $('#content-hero-subtitle').value;
+      s.aboutText1 = $('#content-about-1').value;
+      s.aboutText2 = $('#content-about-2').value;
+      saveSettings(s); applySettings(); toast('Content saved.', 'success');
+    });
+
+    // Admin Contact
+    $('#contact-form-admin').addEventListener('submit', e => {
+      e.preventDefault();
+      const s = getSettings();
+      s.email = $('#contact-email-input').value.trim();
+      s.phone = $('#contact-phone-input').value.trim();
+      s.whatsapp = $('#contact-wa-input').value.replace(/\D/g, '');
+      s.location = $('#contact-location-input').value.trim();
+      saveSettings(s); applySettings(); toast('Contact saved.', 'success');
+    });
+
+    // Admin Institutions
+    $('#save-institutions-btn').addEventListener('click', () => {
+      try {
+        const parsed = JSON.parse($('#institutions-json').value);
+        if (!Array.isArray(parsed)) throw new Error('Must be an array');
+        const s = getSettings(); s.institutions = parsed;
+        saveSettings(s); applySettings(); toast('Saved.', 'success');
+      } catch (err) { toast('Invalid JSON: ' + err.message, 'error'); }
+    });
+
+    // Student Contact Form
+    $('#student-contact-form').addEventListener('submit', e => {
+      e.preventDefault();
+      const s = getSettings();
+      const text = `*Student Message*%0A%0A*Name:* ${encodeURIComponent($('#cf-name').value)}%0A*Email:* ${encodeURIComponent($('#cf-email').value)}%0A*Class:* ${encodeURIComponent($('#cf-class').value)}%0A*School:* ${encodeURIComponent($('#cf-school').value)}%0A*Subject:* ${encodeURIComponent($('#cf-subject').value)}%0A%0A*Message:*%0A${encodeURIComponent($('#cf-message').value)}`;
+      window.open(`https://wa.me/${s.whatsapp}?text=${text}`, '_blank');
+    });
+
+    // Setup Page
+    createParticles();
+    observeReveals();
+    animateCounters();
     applySettings();
     await loadProfileImage();
-  } catch (e) { console.error('UI init error:', e); }
+    
+  } catch (e) { console.error('UI Init Error:', e); }
 
-  // Hide loader early — don't wait for network
-  setTimeout(() => $('#loader').classList.add('hidden'), 500);
-
-  // Restore admin session
+  // Hide Loader & Load Cloud Data
+  setTimeout(() => document.getElementById('loader').classList.add('hidden'), 500);
   setAdminState(isAdminLoggedIn());
-
-  // Test Supabase + load notes
-  try { await updateStorageStatus(); } catch (e) { console.error('Status:', e); }
-  try { await loadNotes(); } catch (e) { console.error('Notes:', e); }
+  await updateStorageStatus();
+  await loadNotes();
 }
-
-// Safety net — never leave user stuck on loader
-setTimeout(() => $('#loader').classList.add('hidden'), 5000);
 
 document.addEventListener('DOMContentLoaded', init);
 </script>
